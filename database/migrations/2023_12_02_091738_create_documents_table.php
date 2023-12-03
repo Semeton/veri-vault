@@ -13,7 +13,12 @@ return new class extends Migration
     {
         Schema::create('documents', function (Blueprint $table) {
             $table->id();
+            $table->string('title');
+            $table->unsignedBigInteger('owner_id');
+            $table->string('encrypted_content');
             $table->timestamps();
+            
+            $table->foreign('owner_id')->references('id')->on('users');
         });
     }
 

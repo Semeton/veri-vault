@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('access_permissions', function (Blueprint $table) {
             $table->id();
+            $table->string('name')->comment('The name of the access permission');
+            $table->uuid('a_p_code')->comment('The code for the access permission');
             $table->timestamps();
         });
     }

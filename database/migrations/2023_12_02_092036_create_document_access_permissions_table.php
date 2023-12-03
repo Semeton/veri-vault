@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('document_access_permissions', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('document_id');
+            $table->foreignId('access_permission_id')->constrained('access_permissions');
             $table->timestamps();
         });
     }
