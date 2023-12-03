@@ -72,6 +72,6 @@ class User extends Authenticatable
 
     public function permission()
     {
-        return $this->belongsToMany(UserAccessPermission::class);
+        return $this->hasOneThrough(UserAccessPermission::class, AccessPermission::class);
     }
 }

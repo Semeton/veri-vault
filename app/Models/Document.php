@@ -20,4 +20,9 @@ class Document extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function permission()
+    {
+        return $this->hasOneThrough(DocumentAccessPermission::class, AccessPermission::class);
+    }
 }
