@@ -16,9 +16,4 @@ class DocumentAccessPermission extends Model
     {
         return $this->belongsTo(Document::class);
     }
-
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(Document::class);
-    }
 }

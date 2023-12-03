@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('title');
             $table->unsignedBigInteger('owner_id');
             $table->string('encrypted_content');
+            $table->foreignId('access_permission_id')->constrained('access_permissions');
             $table->timestamps();
             
             $table->foreign('owner_id')->references('id')->on('users');
