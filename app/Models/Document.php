@@ -23,6 +23,6 @@ class Document extends Model
 
     public function permission()
     {
-        return $this->hasOneThrough(DocumentAccessPermission::class, AccessPermission::class);
+        return $this->hasOneThrough(AccessPermission::class, DocumentAccessPermission::class);
     }
 }
