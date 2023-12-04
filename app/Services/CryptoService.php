@@ -10,14 +10,12 @@ class CryptoService
 
     public function __construct()
     {
-        // $this->key = random_bytes(SODIUM_CRYPTO_SECRETBOX_KEYBYTES);
         $this->key = "SECRET";
     }
 
     public function encrypt(string $message, string $secretCode): string
     {
         $nonce = random_bytes(SODIUM_CRYPTO_SECRETBOX_NONCEBYTES);
-        // $nonce = "SECRET";
 
         $cipher = base64_encode(
             $nonce.
