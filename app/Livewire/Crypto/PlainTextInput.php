@@ -4,7 +4,6 @@ namespace App\Livewire\Crypto;
 
 use Livewire\Component;
 use App\Services\CryptoService;
-use Livewire\Attributes\Validate;
 
 class PlainTextInput extends Component
 {
@@ -13,15 +12,12 @@ class PlainTextInput extends Component
 
     protected $listeners = [];
     
-    // #[Validate('required')]
     public $body = '';
  
-    // #[Validate('required')]
     public $secret = '';
 
     public function mount()
     {
-        // $this->loading = false;
         $this->listeners = [];
         $this->alert = ['success' => false, 'error' => false, 'message' => ''];
     }

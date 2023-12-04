@@ -3,9 +3,7 @@
 namespace App\Livewire\Crypto;
 
 use Livewire\Component;
-use Illuminate\Http\Request;
 use App\Services\CryptoService;
-use Livewire\Attributes\Validate;
 
 class EncryptedTextInput extends Component
 {
