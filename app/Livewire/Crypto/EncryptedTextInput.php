@@ -14,15 +14,12 @@ class EncryptedTextInput extends Component
 
     protected $listeners = [];
 
-    // #[Validate('required')]
     public $encryptedText;
  
-    // #[Validate('required')]
     public $encryptSecret = '';
 
     public function mount()
     {
-        // $this->loading = false;
         $this->listeners = [];
         $this->alert = ['success' => false, 'error' => false, 'message' => ''];
     }

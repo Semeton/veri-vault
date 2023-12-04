@@ -33,7 +33,6 @@ class PlainTextInput extends Component
             'secret' => 'required',
         ]);
         
-        // $cryptoService = new CryptoService;
         if($button == 'encrypt' && $this->body != '' && $this->secret != ''){
             $this->loading = true;
             $this->dispatch('resetError');
