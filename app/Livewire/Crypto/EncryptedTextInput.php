@@ -3,14 +3,24 @@
 namespace App\Livewire\Crypto;
 
 use Livewire\Component;
+use App\Services\CryptoService;
 
 class EncryptedTextInput extends Component
 {
-    public $encryptedText;
+    protected $cryptoService;
 
-    public function mount()
+    public $encryptedText;
+ 
+    public $secret = '';
+
+    public function decryptMessage()
     {
-        $this->encryptedText = '';
+        $encryptedContent = $this->cryptoService->encrypt($this->body, $this->secret);
+
+        return response()->json([
+            'status' => true,
+            'encypted' => $encryptedContent,
+        ]);
     }
     
     public function render()
