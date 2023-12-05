@@ -7,6 +7,7 @@ use App\Services\CryptoService;
 
 class EncryptedTextInput extends Component
 {
+    public $loading = false;
     protected $cryptoService;
 
     public $encryptedText;
