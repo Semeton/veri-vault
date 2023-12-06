@@ -13,6 +13,7 @@
 
     @livewireStyles
     <!-- Styles -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.css" rel="stylesheet" />
     @vite('resources/css/app.css')
     <style>
         /* ! tailwindcss v3.2.4 | MIT License | https://tailwindcss.com */
@@ -53,6 +54,10 @@
         abbr:where([title]) {
             -webkit-text-decoration: underline dotted;
             text-decoration: underline dotted
+        }
+
+        .notification-box {
+            width: 20rem;
         }
 
         h1,
@@ -855,8 +860,9 @@
 
         @yield('content')
 
-        @livewireScripts
     </div>
+    @livewireScripts
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.js"></script>
 </body>
 
 </html>

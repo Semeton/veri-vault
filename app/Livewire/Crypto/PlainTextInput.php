@@ -9,6 +9,7 @@ use Livewire\Attributes\Validate;
 class PlainTextInput extends Component
 {
     public $loading = false;
+    public $alert = ['success' => false, 'error' => false, 'message' => ''];
     
     #[Validate('required')]
     public $body = '';
@@ -19,16 +20,25 @@ class PlainTextInput extends Component
     public function mount()
     {
         $this->loading = false;
+        session()->forget('success');
     }
 
     public function encryptMessage(CryptoService $cryptoService)
     {
         $this->loading = true;
 
-        $encryptedText = $cryptoService->encrypt($this->body, $this->secret);
+        $response = $cryptoService->encrypt($this->body, $this->secret);
         
-        $this->dispatch('encryptedTextUpdated', $encryptedText);
-
+        $error = explode(':', $response)[0];
+        if ($error == 'Error') {
+            // session('error', $response . '. Please try again.');
+            $this->alert['error'] = true ;
+            $this->alert['message'] = $response . '. Please try again.';
+        }else{
+            $this->dispatch('encryptedTextUpdated', $response);
+            $this->alert['success'] = true ;
+            $this->alert['message'] = 'Success';
+        }
         $this->loading = false;
     }
 

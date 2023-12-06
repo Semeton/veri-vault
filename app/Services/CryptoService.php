@@ -46,12 +46,12 @@ class CryptoService
                     hash('sha256', $this->key . $secretCode, true)
                 );
             } catch (\Exception $e) {
-                return new \Exception("Decryption failed: " . $e->getMessage());
+                return "Error: Decryption failed: " . $e->getMessage();
             }
 
 
             if (!is_string($plain)) {
-                return new \Exception("Invalid cipher text.");
+                return "Error: Potential impostor - Secret code is not recognized";
             }
 
             sodium_memzero($ciphertext);
@@ -59,7 +59,7 @@ class CryptoService
 
             return $plain;
         } catch (\Exception $e) {
-            throw new \Exception("Invalid cipher text: " . $e->getMessage());
+            return "Error: Invalid cipher text: " . $e->getMessage();
         }
     }
 }
