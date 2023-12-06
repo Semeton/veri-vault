@@ -4,28 +4,30 @@ namespace App\Livewire\Crypto;
 
 use Livewire\Component;
 use App\Services\CryptoService;
+use Livewire\Attributes\Validate;
 
 class EncryptedTextInput extends Component
 {
     public $loading = false;
-    protected $cryptoService;
 
+    #[Validate('required')]
     public $encryptedText;
  
     public $secret = '';
 
-    public function decryptMessage()
+    public function decryptMessage(CryptoService $cryptoService)
     {
-        $encryptedContent = $this->cryptoService->encrypt($this->body, $this->secret);
+        $this->loading = true;
 
-        return response()->json([
-            'status' => true,
-            'encypted' => $encryptedContent,
-        ]);
+        $encryptedText = $cryptoService->decrypt($this->encryptedText, $this->secret);
+        
+        $this->dispatch('bodyUpdated', $encryptedText);
+
+        $this->loading = false;
     }
     
     public function render()
     {
-        return view('livewire.crypto.encrypted-text-input', ['encryptedText' => $this->encryptedText]);
+        return view('livewire.crypto.encrypted-text-input');
     }
 }

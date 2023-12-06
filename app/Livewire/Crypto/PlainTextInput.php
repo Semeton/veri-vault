@@ -9,7 +9,6 @@ use Livewire\Attributes\Validate;
 class PlainTextInput extends Component
 {
     public $loading = false;
-    public $encryptedText = '';
     
     #[Validate('required')]
     public $body = '';
@@ -27,8 +26,7 @@ class PlainTextInput extends Component
         $this->loading = true;
 
         $encryptedText = $cryptoService->encrypt($this->body, $this->secret);
-
-        $this->encryptedText = $encryptedText;
+        
         $this->dispatch('encryptedTextUpdated', $encryptedText);
 
         $this->loading = false;
@@ -36,6 +34,6 @@ class PlainTextInput extends Component
 
     public function render()
     {
-        return view('livewire.crypto.plain-text-input', ['body' => $this->body]);
+        return view('livewire.crypto.plain-text-input');
     }
 }
