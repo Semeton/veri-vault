@@ -60,7 +60,7 @@
                     wire:model="encryptedText" required>{{ $encryptedText }}</textarea>
                 <div>
                     @error('encryptedText')
-                        <span class="error">{{ $message }}</span>
+                        <span class="error text-red-500">{{ $message }}</span>
                     @enderror
                 </div>
                 <div class="mt-2">
@@ -71,7 +71,7 @@
                         wire:model="encryptSecret" required>
                     <div>
                         @error('encryptSecret')
-                            <span class="error">{{ $message }}</span>
+                            <span class="error text-red-500">{{ $message }}</span>
                         @enderror
                     </div>
                 </div>

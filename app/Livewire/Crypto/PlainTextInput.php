@@ -11,8 +11,6 @@ class PlainTextInput extends Component
 {
     public bool $loading = false;
     public array $alert = ['success' => false, 'error' => false, 'message' => ''];
-
-    protected array $listeners = [];
     
     public string $body = '';
  
@@ -20,7 +18,6 @@ class PlainTextInput extends Component
 
     public function mount()
     {
-        $this->listeners = [];
         $this->alert = ['success' => false, 'error' => false, 'message' => ''];
     }
 

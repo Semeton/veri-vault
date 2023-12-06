@@ -12,15 +12,12 @@ class EncryptedTextInput extends Component
     public bool $loading = false;
     public array $alert = ['success' => false, 'error' => false, 'message' => ''];
 
-    protected $listeners = [];
-
     public string $encryptedText;
  
     public string $encryptSecret = '';
 
     public function mount()
     {
-        $this->listeners = [];
         $this->alert = ['success' => false, 'error' => false, 'message' => ''];
     }
 
