@@ -17,12 +17,6 @@ class PlainTextInput extends Component
     #[Validate('required')]
     public $secret = '';
 
-    public function mount()
-    {
-        $this->loading = false;
-        session()->forget('success');
-    }
-
     public function encryptMessage(CryptoService $cryptoService)
     {
         $this->loading = true;
@@ -31,12 +25,13 @@ class PlainTextInput extends Component
         
         $error = explode(':', $response)[0];
         if ($error == 'Error') {
-            // session('error', $response . '. Please try again.');
             $this->alert['error'] = true ;
-            $this->alert['message'] = $response . '. Please try again.';
+            $this->alert['success'] = false ;
+            $this->alert['message'] = $response;
         }else{
             $this->dispatch('encryptedTextUpdated', $response);
             $this->alert['success'] = true ;
+            $this->alert['error'] = false ;
             $this->alert['message'] = 'Success';
         }
         $this->loading = false;

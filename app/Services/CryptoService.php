@@ -51,7 +51,7 @@ class CryptoService
 
 
             if (!is_string($plain)) {
-                return "Error: Potential impostor - Secret code is not recognized";
+                return "Error: Invalid data or secret code";
             }
 
             sodium_memzero($ciphertext);
