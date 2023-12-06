@@ -27,9 +27,9 @@ class EncryptedTextInput extends Component
         $this->alert = ['success' => false, 'error' => false, 'message' => ''];
     }
 
-    public function decryptMessage($button)
+    public function decryptMessage($button, CryptoService $cryptoService)
     {
-        $cryptoService = new CryptoService;
+        // $cryptoService = new CryptoService;
         if($button == 'decrypt'){
 
             $this->loading = true;
@@ -46,7 +46,7 @@ class EncryptedTextInput extends Component
                 $this->dispatch('bodyUpdated', $response);
                 $this->alert['success'] = true ;
                 $this->alert['error'] = false ;
-                $this->alert['message'] = 'Success';
+                $this->alert['message'] = 'Decrypted successfully';
             }
             $this->loading = false;
         }

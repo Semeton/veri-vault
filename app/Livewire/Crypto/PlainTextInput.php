@@ -44,7 +44,7 @@ class PlainTextInput extends Component
                 $this->dispatch('encryptedTextUpdated', $response);
                 $this->alert['success'] = true ;
                 $this->alert['error'] = false ;
-                $this->alert['message'] = 'Success';
+                $this->alert['message'] = 'Encrypted successfully';
             }
             $this->loading = false;
         }

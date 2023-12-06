@@ -52,7 +52,7 @@
             </button>
         </div>
     @endif
-    <form wire:submit.prevent="encryptMessage('encrypt')">
+    <form id="plainInputForm" wire:submit.prevent="encryptMessage('encrypt')">
         <div class="form-group">
             <div class="mt-2">
                 <textarea id="body" name="body" rows="15" cols="100"
@@ -96,6 +96,11 @@
             document.addEventListener('bodyUpdated', function(e) {
                 const decryptedText = e.detail;
                 @this.set('body', decryptedText[0]);
+                //e.preventDefault();
+            });
+
+            document.getElementById('encryptInputForm').addEventListener('submit', function(e) {
+                e.preventDefault();
             });
         </script>
     </div>
