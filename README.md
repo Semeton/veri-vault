@@ -26,7 +26,7 @@ The SecureMessaging app is a privacy-focused application that enables users to e
 -   Laravel for backend development.
 -   Sodium hashing for zero-knowledge-proof.
 -   Livewire for dynamic and interactive user interfaces.
--   Bootstrap for responsive and clean UI.
+-   Tailwind for responsive and clean UI.
 
 ## Installation
 
