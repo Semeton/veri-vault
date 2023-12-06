@@ -14,11 +14,11 @@ class EncryptedTextInput extends Component
 
     protected $listeners = [];
 
-    #[Validate('required')]
+    // #[Validate('required')]
     public $encryptedText;
  
-    #[Validate('required')]
-    public $secret = '';
+    // #[Validate('required')]
+    public $encryptSecret = '';
 
     public function mount()
     {
@@ -29,13 +29,17 @@ class EncryptedTextInput extends Component
 
     public function decryptMessage($button, CryptoService $cryptoService)
     {
-        // $cryptoService = new CryptoService;
-        if($button == 'decrypt'){
+        $this->validate([
+            'encryptedText' => 'required',
+            'encryptSecret' => 'required',
+        ]);
+
+        if($button == 'decrypt' && $this->encryptedText != '' && $this->encryptSecret != ''){
 
             $this->loading = true;
             $this->dispatch('resetError');
     
-            $response = $cryptoService->decrypt($this->encryptedText, $this->secret);
+            $response = $cryptoService->decrypt($this->encryptedText, $this->encryptSecret);
             
             $error = explode(':', $response)[0];
             if ($error == 'Error') {

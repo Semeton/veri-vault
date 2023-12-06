@@ -13,10 +13,10 @@ class PlainTextInput extends Component
 
     protected $listeners = [];
     
-    #[Validate('required')]
+    // #[Validate('required')]
     public $body = '';
  
-    #[Validate('required')]
+    // #[Validate('required')]
     public $secret = '';
 
     public function mount()
@@ -28,8 +28,13 @@ class PlainTextInput extends Component
 
     public function encryptMessage($button, CryptoService $cryptoService)
     {
+        $this->validate([
+            'body' => 'required',
+            'secret' => 'required',
+        ]);
+        
         // $cryptoService = new CryptoService;
-        if($button == 'encrypt'){
+        if($button == 'encrypt' && $this->body != '' && $this->secret != ''){
             $this->loading = true;
             $this->dispatch('resetError');
     
