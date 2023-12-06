@@ -10,6 +10,8 @@ class PlainTextInput extends Component
 {
     public $loading = false;
     public $alert = ['success' => false, 'error' => false, 'message' => ''];
+
+    protected $listeners = [];
     
     #[Validate('required')]
     public $body = '';
@@ -17,25 +19,35 @@ class PlainTextInput extends Component
     #[Validate('required')]
     public $secret = '';
 
-    public function encryptMessage(CryptoService $cryptoService)
+    public function mount()
     {
-        $this->loading = true;
-        $this->dispatch('resetError');
+        // $this->loading = false;
+        $this->listeners = [];
+        $this->alert = ['success' => false, 'error' => false, 'message' => ''];
+    }
 
-        $response = $cryptoService->encrypt($this->body, $this->secret);
-        
-        $error = explode(':', $response)[0];
-        if ($error == 'Error') {
-            $this->alert['error'] = true ;
-            $this->alert['success'] = false ;
-            $this->alert['message'] = $response;
-        }else{
-            $this->dispatch('encryptedTextUpdated', $response);
-            $this->alert['success'] = true ;
-            $this->alert['error'] = false ;
-            $this->alert['message'] = 'Success';
+    public function encryptMessage($button, CryptoService $cryptoService)
+    {
+        // $cryptoService = new CryptoService;
+        if($button == 'encrypt'){
+            $this->loading = true;
+            $this->dispatch('resetError');
+    
+            $response = $cryptoService->encrypt($this->body, $this->secret);
+            
+            $error = explode(':', $response)[0];
+            if ($error == 'Error') {
+                $this->alert['error'] = true ;
+                $this->alert['success'] = false ;
+                $this->alert['message'] = $response;
+            }else{
+                $this->dispatch('encryptedTextUpdated', $response);
+                $this->alert['success'] = true ;
+                $this->alert['error'] = false ;
+                $this->alert['message'] = 'Success';
+            }
+            $this->loading = false;
         }
-        $this->loading = false;
     }
 
     public function render()

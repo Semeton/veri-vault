@@ -52,7 +52,7 @@
             </button>
         </div>
     @endif
-    <form wire:submit.prevent="decryptMessage">
+    <form wire:submit.prevent="decryptMessage('decrypt')">
         <div class="form-group">
             <div class="mt-2">
                 <textarea id="plainText" name="encryptedText" rows="15" cols="100"
@@ -73,8 +73,9 @@
                                 class="items-center px-4 py-2 bg-indigo-700 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-800 focus:bg-indigo-800 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-indigo-800 transition ease-in-out duration-150 w-full cursor-not-allowed"
                                 disabled>Decrypting</button>
                         @else
-                            <button
-                                class="items-center px-4 py-2 bg-indigo-700 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-800 focus:bg-indigo-800 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-indigo-800 transition ease-in-out duration-150 w-full cursor-pointer">Decrypt
+                            <button name=""
+                                class="items-center px-4 py-2 bg-indigo-700 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-800 focus:bg-indigo-800 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-indigo-800 transition ease-in-out duration-150 w-full cursor-pointer"
+                                wire:click="decryptMessage('decrypt')">Decrypt
                                 Text</button>
                         @endif
 
@@ -89,11 +90,6 @@
             document.addEventListener('encryptedTextUpdated', function(e) {
                 const encryptedText = e.detail;
                 @this.set('encryptedText', encryptedText[0]);
-            });
-
-            document.addEventListener('resetError', function(e) {
-                @this.set('success', false);
-                @this.set('error', false);
             });
         </script>
     </div>
