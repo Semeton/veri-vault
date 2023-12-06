@@ -19,6 +19,7 @@ class EncryptedTextInput extends Component
     public function decryptMessage(CryptoService $cryptoService)
     {
         $this->loading = true;
+        $this->dispatch('resetError');
 
         $response = $cryptoService->decrypt($this->encryptedText, $this->secret);
         

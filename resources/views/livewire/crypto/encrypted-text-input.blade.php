@@ -90,6 +90,11 @@
                 const encryptedText = e.detail;
                 @this.set('encryptedText', encryptedText[0]);
             });
+
+            document.addEventListener('resetError', function(e) {
+                @this.set('success', false);
+                @this.set('error', false);
+            });
         </script>
     </div>
 </div>

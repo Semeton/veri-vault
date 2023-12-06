@@ -20,6 +20,7 @@ class PlainTextInput extends Component
     public function encryptMessage(CryptoService $cryptoService)
     {
         $this->loading = true;
+        $this->dispatch('resetError');
 
         $response = $cryptoService->encrypt($this->body, $this->secret);
         
