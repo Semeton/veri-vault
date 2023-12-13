@@ -12,7 +12,7 @@ class MessageEncryptorController extends Controller
 
     public function __construct(CryptoService $cryptoService)
     {
-        $this->middleware('auth.api', []);
+        // $this->middleware('auth.api', []);
         $this->cryptoService = $cryptoService;
     }
 

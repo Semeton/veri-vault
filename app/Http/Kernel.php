@@ -40,9 +40,8 @@ class Kernel extends HttpKernel
 
         'api' => [
             // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
-            'throttle:300,1',
-            // 'bindings',
             // \App\Http\Middleware\AuthenticateApiKey::class,
+            'throttle:api',
             \Illuminate\Routing\Middleware\ThrottleRequests::class.':api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
@@ -67,7 +66,7 @@ class Kernel extends HttpKernel
         'signed' => \App\Http\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-        'auth.api' => \App\Http\Middleware\AuthenticateApiKey::class,
+        'verify.api' => \App\Http\Middleware\AuthenticateApiKey::class,
     ];
 
     /**
@@ -78,6 +77,6 @@ class Kernel extends HttpKernel
      * @var array<string, class-string|string>
      */
     protected $routeMiddleware = [
-        // 'auth.api' => \App\Http\Middleware\AuthenticateApiKey::class,
+        // 'verify.api' => \App\Http\Middleware\AuthenticateApiKey::class,
     ];
 }
