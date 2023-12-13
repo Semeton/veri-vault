@@ -12,6 +12,7 @@ class MessageEncryptorController extends Controller
 
     public function __construct(CryptoService $cryptoService)
     {
+        $this->middleware('auth.api', []);
         $this->cryptoService = $cryptoService;
     }
 
@@ -27,7 +28,6 @@ class MessageEncryptorController extends Controller
         $encryptedContent = $this->cryptoService->encrypt($validatedData['body'], $validatedData['secret']);
 
         return response()->json([
-            'status' => true,
             'encypted' => $encryptedContent,
         ]);
     }

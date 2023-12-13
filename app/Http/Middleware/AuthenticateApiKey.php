@@ -27,9 +27,9 @@ class AuthenticateApiKey
         return $next($request);
     }
 
-    public function verifyApiKey($apiKey): ApiKey
+    public function verifyApiKey($apiKey): ?ApiKey
     {
-        $apiKeyModel = ApiKey::where('key', $apiKey)->first();
+        $apiKeyModel = ApiKey::where('key', $apiKey);
 
         return $apiKeyModel;
     }
