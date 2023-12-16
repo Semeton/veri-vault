@@ -68,15 +68,4 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'verify.api' => \App\Http\Middleware\AuthenticateApiKey::class,
     ];
-
-    /**
-     * The application's route middleware.
-     *
-     * These middleware may be assigned to groups or used individually.
-     *
-     * @var array<string, class-string|string>
-     */
-    protected $routeMiddleware = [
-        // 'verify.api' => \App\Http\Middleware\AuthenticateApiKey::class,
-    ];
 }
