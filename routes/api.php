@@ -22,7 +22,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::prefix('v1')->group(function () {
-    Route::middleware([AuthenticateApiKey::class])->group(function(){
+    Route::middleware(['auth:sanctum'])->group(function(){
         Route::post('/messages/encrypt', [MessageEncryptorController::class, 'encryptMessage']);
         Route::post('/messages/decrypt', [MessageDecryptorController::class, 'decryptMessage']);
     });
