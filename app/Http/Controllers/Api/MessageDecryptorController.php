@@ -12,7 +12,6 @@ class MessageDecryptorController extends Controller
 
     public function __construct(CryptoService $cryptoService)
     {
-        $this->middleware('auth:api');
         $this->cryptoService = $cryptoService;
     }
 
@@ -21,7 +20,6 @@ class MessageDecryptorController extends Controller
         $validatedData = $request->validate([
             'encrypted_content' => 'required',
             'secret' => 'required',
-            // 'access_permission_id' => 'required|exists:access_permissions,id',
         ]);
 
         $decryptedContent = $this->cryptoService->decrypt($validatedData['encrypted_content'], $validatedData['secret']);

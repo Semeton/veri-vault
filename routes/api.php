@@ -6,6 +6,7 @@ use App\Http\Middleware\AuthenticateApiKey;
 use App\Http\Controllers\Api\UserAuthController;
 use App\Http\Controllers\Api\MessageDecryptorController;
 use App\Http\Controllers\Api\MessageEncryptorController;
+use App\Http\Controllers\Api\PersonalAccessTokenController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,15 +25,20 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::prefix('v1')->group(function () {
     Route::get('/', function(){
-    return response()->json([
-        'message' => 'Api server running'
-    ]);
-});
+        return response()->json([
+            'message' => 'Api server running'
+        ]);
+    });
     Route::prefix('users')->group(function () {
         Route::post('/register', [UserAuthController::class, 'register']);
         Route::post('/login', [UserAuthController::class, 'login']);
     });
     Route::middleware(['auth:sanctum'])->group(function(){
+        Route::prefix('tokens')->group(function () {
+            Route::get('/', [PersonalAccessTokenController::class, 'index']);
+            Route::post('/create', [PersonalAccessTokenController::class, 'create']);
+        });
+        
         Route::prefix('messages')->group(function () {
             Route::post('/encrypt', [MessageEncryptorController::class, 'encryptMessage']);
             Route::post('/decrypt', [MessageDecryptorController::class, 'decryptMessage']);
