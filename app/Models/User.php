@@ -69,9 +69,4 @@ class User extends Authenticatable
     {
         return $this->hasMany(Document::class);
     }
-
-    public function permission()
-    {
-        return $this->hasOneThrough(AccessPermission::class, UserAccessPermission::class);
-    }
 }
