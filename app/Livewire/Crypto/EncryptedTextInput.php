@@ -10,7 +10,7 @@ use App\Services\CryptoService;
 class EncryptedTextInput extends Component
 {
     public bool $loading = false;
-    public array $alert = ['success' => false, 'error' => false, 'message' => ''];
+    public array $alert = ['d-success' => false, 'd-error' => false, 'd-message' => ''];
 
     public string $encryptedText;
  
@@ -18,7 +18,7 @@ class EncryptedTextInput extends Component
 
     public function mount()
     {
-        $this->alert = ['success' => false, 'error' => false, 'message' => ''];
+        $this->alert = ['d-success' => false, 'd-error' => false, 'd-message' => ''];
     }
 
     public function decryptMessage(string $button, CryptoService $cryptoService): void
@@ -37,14 +37,14 @@ class EncryptedTextInput extends Component
             
             $error = explode(':', $response)[0];
             if ($error === 'Error') {
-                $this->alert['error'] = true ;
-                $this->alert['success'] = false ;
-                $this->alert['message'] = $response;
+                $this->alert['d-error'] = true ;
+                $this->alert['d-success'] = false ;
+                $this->alert['d-message'] = $response;
             } else {
                 $this->dispatch('bodyUpdated', $response);
-                $this->alert['success'] = true ;
-                $this->alert['error'] = false ;
-                $this->alert['message'] = 'Decrypted successfully';
+                $this->alert['d-success'] = true ;
+                $this->alert['d-error'] = false ;
+                $this->alert['d-message'] = 'Decrypted successfully';
             }
             $this->loading = false;
         }
