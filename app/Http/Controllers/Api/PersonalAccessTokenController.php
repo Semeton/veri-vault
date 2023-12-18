@@ -23,6 +23,6 @@ class PersonalAccessTokenController extends Controller
         ]);
         $abilities = explode(',', $validatedData['abilities']);
         $token = $request->user()->createToken($request->token_name, $abilities);
-        return response()->json(['token' => $token->plainTextToken, 'abilities' => $token->abilities], 201);
+        return response()->json(['token' => $token->plainTextToken], 201);
     }
 }
