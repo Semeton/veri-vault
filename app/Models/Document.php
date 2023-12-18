@@ -12,8 +12,9 @@ class Document extends Model
 
     protected $fillable = [
         'title',
-        'owner_id',
+        'user_id',
         'encrypted_content',
+        'uuid'
     ];
 
     public function user(): BelongsTo

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\EncryptedMessagesController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,5 +26,9 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+    Route::prefix('/user/')->group(function () {
+        Route::get('/encrypted-messages', [EncryptedMessagesController::class, 'index'])->name('encryptedMessages');
+        Route::get('/decrypted-messages', [EncryptedMessagesController::class, 'index'])->name('decryptedMessages');
+    });
 });
 // 

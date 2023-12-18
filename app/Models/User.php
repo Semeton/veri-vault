@@ -14,13 +14,14 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
+    // implements MustVerifyEmail
     use HasApiTokens;
     use HasFactory;
     use HasProfilePhoto;
     use HasTeams;
     use Notifiable;
     use TwoFactorAuthenticatable;
-
+    
     /**
      * The attributes that are mass assignable.
      *
@@ -65,7 +66,7 @@ class User extends Authenticatable
         return $this->hasMany(ApiKey::class);
     }
 
-    public function document(): HasMany
+    public function documents(): HasMany
     {
         return $this->hasMany(Document::class);
     }

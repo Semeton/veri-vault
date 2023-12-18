@@ -3,8 +3,9 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Models\User;
 use App\Models\Document;
-use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class EncryptRequestService {
 
@@ -15,22 +16,20 @@ class EncryptRequestService {
         $this->cryptoService = $cryptoService;
     }
     
-    public function storeDocument(Request $request): void
+    public function encryptAndStoreDocument(User $user, $data): Document
     {
-        $validatedData = $request->validate([
-            'title' => 'required|max:255',
-            'body' => 'required',
-            'secret' => 'required',
-            'access_permission_id' => 'required|exists:access_permissions,id',
-        ]);
+        $encryptedContent = $this->cryptoService->encrypt($data['body'], $data['secret']);
 
-        $encryptedContent = $this->cryptoService->encrypt($validatedData['body'], $validatedData['secret']);
-
-        Document::create([
-            'title' => $validatedData['title'],
-            'owner_id' => $request->user()->id,
+        $encryptedDocument = [
+            'title' => $data['title'],
             'encrypted_content' => $encryptedContent,
-            'access_permission_id' => $validatedData['access_permission_id'],
-        ]);
+            'uuid' => Str::uuid(),
+        ];
+
+        // dd($encryptedDocument);
+        
+        $document = $user->documents()->create($encryptedDocument);
+
+        return $document;
     }
 }
