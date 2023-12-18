@@ -1,7 +1,3 @@
-Sure, here's a template for a GitHub repository summary for your application:
-
----
-
 # VeriVault App
 
 ## Overview
