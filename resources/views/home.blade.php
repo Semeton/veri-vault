@@ -66,7 +66,7 @@
                 {{--  <label for="showEncryptionKey" class="">Generate a random secret key</label>  --}}
                 <input type="text" id="secretKey" class="w-96 p-2 border border-gray-300 rounded-md" readonly>
                 <button type="button" onclick="generateSecretKey()"
-                    class="items-center px-4 py-3 !bg-indigo-700 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-800 focus:bg-indigo-800 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-indigo-800 transition ease-in-out duration-150 w-56">Generate</button>
+                    class="items-center px-4 py-3 !bg-indigo-700 !bg-indigo-700 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-800 focus:bg-indigo-800 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-indigo-800 transition ease-in-out duration-150 w-56">Generate</button>
             </form>
         </div>
     </div>
