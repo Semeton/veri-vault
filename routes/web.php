@@ -29,6 +29,9 @@ Route::middleware([
     Route::prefix('/user/')->group(function () {
         Route::get('/encrypted-messages', [EncryptedMessagesController::class, 'index'])->name('encryptedMessages');
         Route::get('/decrypted-messages', [EncryptedMessagesController::class, 'index'])->name('decryptedMessages');
+        Route::get('/send-email', function () {
+            return view('messages.emails.index');
+        })->name('encryptAndSendMail');
     });
 });
 // 
