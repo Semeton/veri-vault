@@ -10,6 +10,7 @@ class EncryptedEmails extends Component
     public bool $loading = false;
     public array $alert = ['success' => false, 'error' => false, 'message' => ''];
     
+    public string $recipient = '';
     public string $subject = '';
     public string $body = '';
     public string $secret = '';
@@ -22,6 +23,7 @@ class EncryptedEmails extends Component
     public function encryptEmail(string $button, CryptoService $cryptoService): void
     {
         $data = $this->validate([
+            'recipient' => 'required',
             'subject' => 'required',
             'body' => 'required',
             'secret' => 'required',

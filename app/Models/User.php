@@ -70,4 +70,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Document::class);
     }
+
+    public function encryptedEmails(): HasMany
+    {
+        return $this->hasMany(EncryptedEmail::class);
+    }
 }

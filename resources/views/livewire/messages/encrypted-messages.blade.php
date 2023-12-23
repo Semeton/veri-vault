@@ -60,7 +60,7 @@
                     {{ __('You may delete any of your existing tokens if they are no longer needed.') }}
                 </x-slot>
 
-                <!-- API Token List -->
+                <!-- Encry List -->
                 <x-slot name="content">
                     <div class="space-y-6">
                         @foreach ($this->user->tokens->sortBy('name') as $token)

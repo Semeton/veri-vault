@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\EncryptedMessagesController;
+use App\Http\Controllers\EncryptedEmailController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,8 +16,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('home');
+Route::get('/', function (Request $request) {
+    $info = [
+        'ip' => $request->ip(),
+        'userAgent' => $request->header('User-Agent'),
+        'os' => $request->server('HTTP_SEC_CH_UA_PLATFORM')
+    ];
+    // return response()->json(['data' => $info]);
+    return view('home', ['data' => $info]);
 })->name('home');
 
 Route::middleware([
@@ -29,9 +37,7 @@ Route::middleware([
     Route::prefix('/user/')->group(function () {
         Route::get('/encrypted-messages', [EncryptedMessagesController::class, 'index'])->name('encryptedMessages');
         Route::get('/decrypted-messages', [EncryptedMessagesController::class, 'index'])->name('decryptedMessages');
-        Route::get('/send-email', function () {
-            return view('messages.emails.index');
-        })->name('encryptAndSendMail');
+        Route::get('/send-email', [EncryptedEmailController::class, 'index'])->name('encryptAndSendMail');
     });
 });
 // 
