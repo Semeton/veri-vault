@@ -15,7 +15,6 @@ class EncryptedEmails extends Component
     public User $user;
     
     public bool $loading = false;
-    public array $alert = ['success' => false, 'error' => false, 'message' => ''];
     
     #[Validate('required')] 
     public string $recipient = '';
@@ -32,30 +31,33 @@ class EncryptedEmails extends Component
 
     public function mount()
     {
-        $this->alert = ['success' => false, 'error' => false, 'message' => ''];
+        $this->loading = false;
     }
 
-    public function encryptEmail(string $button, CryptoService $cryptoService, EmailService $emailService): void
+    public function encryptEmail(string $button, CryptoService $cryptoService, EmailService $emailService)
     {
         if ($button === 'email') {
             $this->loading = true;
-            $encryptedBody = $cryptoService->encrypt($this->body, $this->secret);
 
-            $data = [
-                'subject' => $this->subject,
-                'body' => $encryptedBody,
-            ];
-            
             try {
+                $encryptedBody = $cryptoService->encrypt($this->body, $this->secret);
+
+                $data = [
+                    'subject' => $this->subject,
+                    'encrypted_body' => $encryptedBody,
+                ];
+
                 $this->user = Auth::user();
                 $savedData = $this->user->encryptedEmails()->create($data);
-                $mailData = $savedData->get();
+                $mailData = $savedData->toArray();
+
                 $emailService->sendEncryptedMail($this->recipient, $this->user, $mailData);
-                $this->alert = ['success' => true, 'error' => false, 'message' => 'Encrypted email sent successfully'];
+                $this->loading = false;
+                return redirect()->route('encryptAndSendMail')->with('success', 'Encrypted email sent successfully');
             } catch (Exception $e) {
-                $this->alert = ['success' => false, 'error' => true, 'message' => $e->getMessage()];
+                $this->loading = false;
+                return redirect()->route('encryptAndSendMail')->with('error', $e->getMessage());
             }
-            $this->loading = false;
         }
     }
 

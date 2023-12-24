@@ -1,5 +1,5 @@
 <div>
-    @if ($alert['success'])
+    @if ('success')
         <div id="toast-success"
             class="fixed top-0 right-0 flex items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800"
             role="alert">
@@ -12,7 +12,7 @@
                 </svg>
                 <span class="sr-only">Check icon</span>
             </div>
-            <div class="ms-3 text-sm font-normal">{{ $alert['message'] }}</div>
+            <div class="ms-3 text-sm font-normal">{{ session()->get('success') }}</div>
             <button type="button"
                 class="btn-close ms-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex items-center justify-center h-8 w-8 dark:text-gray-500 dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700"
                 data-dismiss-target="#toast-success" data-bs-dismiss="#toast-success" aria-label="Close"
@@ -25,7 +25,7 @@
                 </svg>
             </button>
         </div>
-    @elseif($alert['error'])
+    @elseif('error')
         <div id="toast-danger"
             class="fixed top-0 right-0 flex items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800"
             role="alert">
@@ -38,7 +38,7 @@
                 </svg>
                 <span class="sr-only">Error icon</span>
             </div>
-            <div class="ms-3 text-sm font-normal">{{ $alert['message'] }}</div>
+            <div class="ms-3 text-sm font-normal">{{ session()->get('error') }}</div>
             <button type="button"
                 class="ms-auto -mx-1.5 -my-1.5 bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex items-center justify-center h-8 w-8 dark:text-gray-500 dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700"
                 data-dismiss-target="#toast-danger" aria-label="Close"
@@ -105,16 +105,22 @@
                 </div>
 
                 <div class="mt-4">
-                    @if ($loading)
-                        <button
+                    {{--  @if ($loading)  --}}
+                    <div wire:loading>
+                        <button name='email'
                             class="items-center px-4 py-2 bg-indigo-700 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-800 focus:bg-indigo-800 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-indigo-800 transition ease-in-out duration-150 w-full cursor-not-allowed"
-                            disabled>Sending</button>
-                    @else
+                            style="width: 100vmax !important">
+                            Sending...</button>
+                    </div>
+
+                    {{--  @else  --}}
+                    <div wire:loading.remove>
                         <button name='email'
                             class="items-center px-4 py-2 bg-indigo-700 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-800 focus:bg-indigo-800 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-indigo-800 transition ease-in-out duration-150 w-full cursor-pointer">Encrypt
                             And Send Email</button>
-                    @endif
+                    </div>
 
+                    {{--  @endif  --}}
                 </div>
             </div>
         </div>

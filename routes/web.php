@@ -26,6 +26,8 @@ Route::get('/', function (Request $request) {
     return view('home', ['data' => $info]);
 })->name('home');
 
+Route::get('/email/{uuid}', [EncryptedEmailController::class, 'getSecret']);
+
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
@@ -40,4 +42,4 @@ Route::middleware([
         Route::get('/send-email', [EncryptedEmailController::class, 'index'])->name('encryptAndSendMail');
     });
 });
-// 
+// return redirect('encryptAndSendMail')

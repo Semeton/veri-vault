@@ -11,6 +11,9 @@
                 <div class="p-4">
                     @livewire('messages.encrypted-emails')
                     <div class="my-8 pt-6">
+                        <p class="text-white">Total encrypted emails sent:
+                            {{ count($encryptedEmails) }}
+                        </p>
                         <hr class="mt-2" style="border-color: #595959;" />
                     </div>
                     <div class="bg-gray-200 dark:bg-gray-800 bg-opacity-25">
