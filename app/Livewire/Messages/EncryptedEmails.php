@@ -51,9 +51,12 @@ class EncryptedEmails extends Component
                 $savedData = $this->user->encryptedEmails()->create($data);
                 $mailData = $savedData->toArray();
 
-                $emailService->sendEncryptedMail($this->recipient, $this->user, $mailData);
-                $this->loading = false;
-                return redirect()->route('encryptAndSendMail')->with('success', 'Encrypted email sent successfully');
+                if($emailService->sendEncryptedMail($this->recipient, $this->user, $mailData)){
+                    $this->loading = false;
+                    return redirect()->route('encryptAndSendMail')->with('success', 'Encrypted email sent successfully');
+                }else{
+                    return redirect()->route('encryptAndSendMail')->with('error', 'Some error occurred');
+                }
             } catch (Exception $e) {
                 $this->loading = false;
                 return redirect()->route('encryptAndSendMail')->with('error', $e->getMessage());

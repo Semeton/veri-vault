@@ -28,7 +28,7 @@ class EncryptedEmailController extends Controller
     {
         $exists = EncryptedEmail::where('uuid', $uuid)->exists();
         if($exists){
-            return view('', ['uuid' => $uuid]);
+            return view('messages.emails.view', ['uuid' => $uuid]);
         } else {
             return redirect('home')->with('error', 'Problem dey');
         }
@@ -40,14 +40,16 @@ class EncryptedEmailController extends Controller
             'secret' => 'required|string'
         ]);
 
+        // dd([$uuid, $request['secret']]);
+
         $encryptedEmail = EncryptedEmail::where('uuid', $uuid)->first();
-        $decryptedBody = $this->cryptoService->decrypt($encryptedEmail, $request->secret);
+        $decryptedBody = $this->cryptoService->decrypt($encryptedEmail['encrypted_body'], $request->secret);
 
         $error = explode(':', $decryptedBody)[0];
             if ($error === 'Error') {
-            return redirect('home')->with('error', 'Problem dey');
+                dd($decryptedBody);
             } else {
-               return view('', ['decryptedBody' => $decryptedBody]);
+               return view('messages.emails.reveal', ['decryptedBody' => $decryptedBody]);
             }
         
         

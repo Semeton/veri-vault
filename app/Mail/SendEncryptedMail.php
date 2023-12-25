@@ -42,7 +42,7 @@ class SendEncryptedMail extends Mailable
         return new Content(
             markdown: 'emails.send-encrypted-mail',
             with: [
-                'data' => $this->mailData
+                'url' => route('viewEncryptedEmail', ['uuid' => $this->mailData['uuid']])
             ],
         );
     }

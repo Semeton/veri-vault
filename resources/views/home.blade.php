@@ -1,5 +1,6 @@
 @extends('layouts.structure')
-
+@include('layouts.header')
+@include('layouts.sections')
 @section('content')
     <div class="max-w-7xl mx-auto p-6 lg:p-8" id="encryptDecryptSection">
         <div class="mt-16">

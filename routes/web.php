@@ -1,9 +1,11 @@
 <?php
 
-use App\Http\Controllers\EncryptedMessagesController;
-use App\Http\Controllers\EncryptedEmailController;
 use Illuminate\Http\Request;
+use App\Models\EncryptedEmail;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\EncryptedEmailController;
+use App\Http\Controllers\EncryptedMessagesController;
+use App\Services\EmailService;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,7 +28,8 @@ Route::get('/', function (Request $request) {
     return view('home', ['data' => $info]);
 })->name('home');
 
-Route::get('/email/{uuid}', [EncryptedEmailController::class, 'getSecret']);
+Route::get('/email/{uuid}', [EncryptedEmailController::class, 'getSecret'])->name('viewEncryptedEmail');
+Route::post('/email/{uuid}', [EncryptedEmailController::class, 'decryptEmail'])->name('revealEncryptedMessage');
 
 Route::middleware([
     'auth:sanctum',
@@ -43,3 +46,10 @@ Route::middleware([
     });
 });
 // return redirect('encryptAndSendMail')
+Route::get('/email', function (EmailService $emailService) {
+    
+    $mailData = EncryptedEmail::latest()->first()->toArray();
+    // $emailService->sendEncryptedMail($this->recipient, $this->user, $mailData);
+    $url = '/email/'.$mailData['uuid'];
+    return view('emails.send-encrypted-mail', ['url' => $url]);
+})->name('mockSendEncryptedMail');
