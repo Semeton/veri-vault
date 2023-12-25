@@ -1,5 +1,5 @@
 <div>
-    @if ('success')
+    @if (!empty(session()->get('success')))
         <div id="toast-success"
             class="fixed top-0 right-0 flex items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800"
             role="alert">
@@ -25,7 +25,7 @@
                 </svg>
             </button>
         </div>
-    @elseif('error')
+    @elseif(!empty(session()->get('error')))
         <div id="toast-danger"
             class="fixed top-0 right-0 flex items-center w-full max-w-xs p-4 mb-4 text-gray-500 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800"
             role="alert">

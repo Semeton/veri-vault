@@ -40,18 +40,29 @@ class EncryptedEmailController extends Controller
             'secret' => 'required|string'
         ]);
 
-        // dd([$uuid, $request['secret']]);
-
         $encryptedEmail = EncryptedEmail::where('uuid', $uuid)->first();
         $decryptedBody = $this->cryptoService->decrypt($encryptedEmail['encrypted_body'], $request->secret);
 
         $error = explode(':', $decryptedBody)[0];
-            if ($error === 'Error') {
-                dd($decryptedBody);
-            } else {
-               return view('messages.emails.reveal', ['decryptedBody' => $decryptedBody]);
-            }
-        
-        
+        if ($error === 'Error') {
+            dd($decryptedBody);
+        } else {
+            return view('messages.emails.reveal', ['decryptedBody' => $decryptedBody]);
+        }
     }
+
+    public function delete($uuid)
+    {
+        $encryptedEmail = EncryptedEmail::where('uuid', $uuid)
+            ->where('user_id', Auth::id())
+            ->first();
+
+        if($encryptedEmail){
+            $encryptedEmail->delete();
+            return redirect()->back()->with('success', 'Encrypted email deleted successfully');
+        } else {
+            return redirect()->back()->with('error', 'Unauthorized to delete this encrypted email');
+        }
+    }
+
 }

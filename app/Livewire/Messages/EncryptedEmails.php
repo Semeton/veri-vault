@@ -31,7 +31,7 @@ class EncryptedEmails extends Component
 
     public function mount()
     {
-        $this->loading = false;
+        $this->loading = false;        
     }
 
     public function encryptEmail(string $button, CryptoService $cryptoService, EmailService $emailService)
@@ -51,12 +51,9 @@ class EncryptedEmails extends Component
                 $savedData = $this->user->encryptedEmails()->create($data);
                 $mailData = $savedData->toArray();
 
-                if($emailService->sendEncryptedMail($this->recipient, $this->user, $mailData)){
-                    $this->loading = false;
-                    return redirect()->route('encryptAndSendMail')->with('success', 'Encrypted email sent successfully');
-                }else{
-                    return redirect()->route('encryptAndSendMail')->with('error', 'Some error occurred');
-                }
+                $emailService->sendEncryptedMail($this->recipient, $this->user, $mailData);
+                $this->loading = false;
+                return redirect()->route('encryptAndSendMail')->with('success', 'Encrypted email sent successfully');
             } catch (Exception $e) {
                 $this->loading = false;
                 return redirect()->route('encryptAndSendMail')->with('error', $e->getMessage());

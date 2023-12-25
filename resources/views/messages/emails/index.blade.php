@@ -11,10 +11,12 @@
                 <div class="p-4">
                     @livewire('messages.encrypted-emails')
                     <div class="my-8 pt-6">
-                        <p class="text-white">Total encrypted emails sent:
+                        <p class="dark:text-white mb-2">Total encrypted emails sent:
                             {{ count($encryptedEmails) }}
                         </p>
                         <hr class="mt-2" style="border-color: #595959;" />
+                        <div class="uppercase text-xs dark:text-white my-4">Subject</div>
+                        <hr class="mt-2 mb-0" style="border-color: #595959;" />
                     </div>
                     <div class="bg-gray-200 dark:bg-gray-800 bg-opacity-25">
                         @if (count($encryptedEmails) > 0)
@@ -38,10 +40,10 @@
                                                 </div>
                                             @endif
 
-                                            <button class="cursor-pointer ms-6 text-sm text-red-500"
-                                                {{--  wire:click="confirmApiTokenDeletion({{ $token->id }})"  --}}>
-                                                {{ __('Delete') }}
-                                            </button>
+                                            <a class="cursor-pointer ms-6 text-sm text-red-500 px-3 mb-0"
+                                                href="{{ route('deleteEncryptedMail', $item->uuid) }}"
+                                                onclick="return confirm('Are you sure you want to delete this encrypted email?')"><i
+                                                    class="fa fa-trash" aria-hidden="true"></i>Delete</a>
                                         </div>
                                     </div>
                                 @endforeach

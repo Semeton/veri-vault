@@ -43,6 +43,7 @@ Route::middleware([
         Route::get('/encrypted-messages', [EncryptedMessagesController::class, 'index'])->name('encryptedMessages');
         Route::get('/decrypted-messages', [EncryptedMessagesController::class, 'index'])->name('decryptedMessages');
         Route::get('/send-email', [EncryptedEmailController::class, 'index'])->name('encryptAndSendMail');
+        Route::get('/delete-email/{uuid}', [EncryptedEmailController::class, 'delete'])->name('deleteEncryptedMail');
     });
 });
 // return redirect('encryptAndSendMail')
