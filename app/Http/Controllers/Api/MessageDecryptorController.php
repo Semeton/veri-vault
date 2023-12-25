@@ -22,11 +22,16 @@ class MessageDecryptorController extends Controller
             'secret' => 'required',
         ]);
 
-        $decryptedContent = $this->cryptoService->decrypt($validatedData['encrypted_content'], $validatedData['secret']);
-
-        return response()->json([
-            'status' => true,
-            'decypted' => $decryptedContent,
-        ]);
+        $bearerToken = $request->bearerToken();
+        if ($bearerToken && $request->user()->tokenCan('read')) {
+            $decryptedContent = $this->cryptoService->decrypt($validatedData['encrypted_content'], $validatedData['secret']);
+            return response()->json([
+                'document' => $decryptedContent,
+            ]);
+        } else {
+            return response()->json([
+                'message' => 'You are not allowed to perform this operation'
+            ], 401);
+        }
     }
 }

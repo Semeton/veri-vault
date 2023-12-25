@@ -22,7 +22,15 @@ class PersonalAccessTokenController extends Controller
             'abilities' => 'required'
         ]);
         $abilities = explode(',', $validatedData['abilities']);
-        $token = $request->user()->createToken($request->token_name, $abilities);
+        $bearerToken = $request->bearerToken();
+        if ($bearerToken && $request->user()->tokenCan('*')) {
+            $token = $request->user()->createToken($request->token_name, $abilities);
         return response()->json(['token' => $token->plainTextToken], 201);
+        } else {
+            return response()->json([
+                'message' => 'You are not allowed to perform this operation'
+            ], 401);
+        }
+        
     }
 }
