@@ -8,11 +8,19 @@ use Illuminate\Support\Facades\Auth;
 
 class PersonalAccessTokenController extends Controller
 {
-     public function index()
+     public function index(Request $request)
      {
-         $user = Auth::user();
-         $tokens = $user->tokens;
-         return response()->json(['tokens' => $tokens]);
+        $user = Auth::user();
+        $bearerToken = $request->bearerToken();
+        if ($bearerToken && $request->user()->tokenCan('*')) {
+            $tokens = $user->tokens;
+            return response()->json(['tokens' => $tokens]);
+        } else {
+            return response()->json([
+                'message' => 'You are not allowed to perform this operation'
+            ], 401);
+        }
+         
      }
     
     public function create(Request $request)
@@ -31,6 +39,5 @@ class PersonalAccessTokenController extends Controller
                 'message' => 'You are not allowed to perform this operation'
             ], 401);
         }
-        
     }
 }
