@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Services\CryptoService;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Services\EncryptRequestService;
 
 class MessageEncryptorController extends Controller
@@ -21,8 +22,8 @@ class MessageEncryptorController extends Controller
     public function encryptMessage(Request $request)
     {
         $validatedData = $request->validate([
-            'body' => 'required',
-            'secret' => 'required',
+            'body' => 'required|string',
+            'secret' => 'required|string',
         ]);
 
         if ($request->has('persist')) {
@@ -40,12 +41,17 @@ class MessageEncryptorController extends Controller
                 'secret' => $request['secret'],
             ];
 
-            $encryptedContent = $this->encryptRequestService->encryptAndStoreDocument($request->user(), $data);
-
-            return response()->json([
-                'document' => $encryptedContent,
-            ]);
-
+            $bearerToken = $request->bearerToken();
+            if ($bearerToken && $request->user()->tokenCan('create')) {
+                $encryptedContent = $this->encryptRequestService->encryptAndStoreDocument($request->user(), $data);
+                return response()->json([
+                    'document' => $encryptedContent,
+                ]);
+            } else {
+                return response()->json([
+                    'message' => 'You are not allowed to perform this operation'
+                ], 401);
+            }
         }else{
             $encryptedContent = $this->cryptoService->encrypt($validatedData['body'], $validatedData['secret']);
     
