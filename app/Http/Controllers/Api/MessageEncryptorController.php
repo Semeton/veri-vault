@@ -2,24 +2,40 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Services\CryptoService;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Services\EncryptRequestService;
+use App\Livewire\Messages\EncryptedMessages;
 
 class MessageEncryptorController extends Controller
 {
-    protected $cryptoService;
-    protected $encryptRequestService;
+    public User $user;
 
-    public function __construct(CryptoService $cryptoService, EncryptRequestService $encryptRequestService)
+    public function __construct(protected CryptoService $cryptoService, protected EncryptRequestService $encryptRequestService)
     {
-        $this->cryptoService = $cryptoService;
-        $this->encryptRequestService = $encryptRequestService;
     }
 
-    public function encryptMessage(Request $request)
+    public function index(Request $request)
+    {
+        $this->user = Auth::user();
+        $bearerToken = $request->bearerToken();
+        if ($bearerToken && $request->user()->tokenCan('*')) {
+            $documents = $this->user->documents()->select('id', 'title', 'uuid', 'created_at', 'updated_at')->get();
+            return response()->json([
+                'documents' => $documents
+            ]);
+        } else {
+            return response()->json([
+                'message' => 'You are not allowed to perform this operation'
+            ], 401);
+        }
+        
+    }
+
+    public function store(Request $request)
     {
         $validatedData = $request->validate([
             'body' => 'required|string',
@@ -27,7 +43,6 @@ class MessageEncryptorController extends Controller
         ]);
 
         if ($request->has('persist')) {
-            
             if(!$request['title']){
                 return response()->json([
                     'message' => 'The title field is required',
@@ -58,6 +73,41 @@ class MessageEncryptorController extends Controller
             return response()->json([
                 'encypted' => $encryptedContent,
             ]);
+        }
+    }
+
+    public function update(Request $request, string $uuid)
+    {
+        $data = $request->validate([
+            'title' => 'required|string',
+            'body' => 'required|string',
+            'secret' => 'required|string',
+        ]);
+
+        $bearerToken = $request->bearerToken();
+        if ($bearerToken && $request->user()->tokenCan('update')) {
+            $encryptedContent = $this->encryptRequestService->encryptAndUpdateDocument($request->user(), $data, $uuid);
+            return response()->json([
+                'document' => $encryptedContent,
+            ]);
+        } else {
+            return response()->json([
+                'message' => 'You are not allowed to perform this operation'
+            ], 401);
+        }
+    }
+
+    public function delete(string $uuid)
+    {
+        $encryptedEmail = EncryptedMessages::where('uuid', $uuid)
+            ->where('user_id', Auth::id())
+            ->first();
+
+        if($encryptedEmail){
+            $encryptedEmail->delete();
+            return redirect()->back()->with('success', 'Encrypted email deleted successfully');
+        } else {
+            return redirect()->back()->with('error', 'Unauthorized to delete this encrypted email');
         }
     }
 }

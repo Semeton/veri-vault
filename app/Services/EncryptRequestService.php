@@ -25,10 +25,20 @@ class EncryptRequestService {
             'encrypted_content' => $encryptedContent,
             'uuid' => Str::uuid(),
         ];
-
-        // dd($encryptedDocument);
         
         $document = $user->documents()->create($encryptedDocument);
+
+        return $document;
+    }
+
+    public function encryptAndUpdateDocument(User $user, Array $data, string $uuid): Document
+    {
+        $encryptedContent = $this->cryptoService->encrypt($data['body'], $data['secret']);
+
+        $document = $user->documents()->where('uuid', $uuid)->update([
+            'title' => $data['title'],
+            'encrypted_content' => $encryptedContent,
+        ]);
 
         return $document;
     }

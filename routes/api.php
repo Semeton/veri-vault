@@ -40,7 +40,10 @@ Route::prefix('v1')->group(function () {
         });
         
         Route::prefix('messages')->group(function () {
-            Route::post('/encrypt', [MessageEncryptorController::class, 'encryptMessage']);
+            Route::get('/', [MessageEncryptorController::class, 'index']);
+            Route::post('/', [MessageEncryptorController::class, 'store']);
+            Route::put('/{uuid}', [MessageEncryptorController::class, 'update']);
+            Route::delete('/{uuid}', [MessageEncryptorController::class, 'destroy']);
             Route::post('/decrypt', [MessageDecryptorController::class, 'decryptMessage']);
         });
     });
