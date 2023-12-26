@@ -39,7 +39,7 @@ Route::prefix('v1')->group(function () {
             Route::post('/create', [PersonalAccessTokenController::class, 'create']);
         });
         
-        Route::prefix('messages')->group(function () {
+        Route::prefix('documents')->group(function () {
             Route::get('/', [MessageEncryptorController::class, 'index']);
             Route::post('/', [MessageEncryptorController::class, 'store']);
             Route::put('/{uuid}', [MessageEncryptorController::class, 'update']);
