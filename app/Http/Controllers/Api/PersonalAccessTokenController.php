@@ -18,7 +18,7 @@ class PersonalAccessTokenController extends Controller
         } else {
             return response()->json([
                 'message' => 'You are not allowed to perform this operation'
-            ], 401);
+            ], 403);
         }
          
      }
@@ -37,7 +37,7 @@ class PersonalAccessTokenController extends Controller
         } else {
             return response()->json([
                 'message' => 'You are not allowed to perform this operation'
-            ], 401);
+            ], 403);
         }
     }
 }

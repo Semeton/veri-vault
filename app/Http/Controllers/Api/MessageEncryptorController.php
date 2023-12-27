@@ -30,7 +30,7 @@ class MessageEncryptorController extends Controller
         } else {
             return response()->json([
                 'message' => 'You are not allowed to perform this operation'
-            ], 401);
+            ], 403);
         }
         
     }
@@ -65,7 +65,7 @@ class MessageEncryptorController extends Controller
             } else {
                 return response()->json([
                     'message' => 'You are not allowed to perform this operation'
-                ], 401);
+                ], 403);
             }
         }else{
             $encryptedContent = $this->cryptoService->encrypt($validatedData['body'], $validatedData['secret']);
@@ -93,7 +93,7 @@ class MessageEncryptorController extends Controller
         } else {
             return response()->json([
                 'message' => 'You are not allowed to perform this operation'
-            ], 401);
+            ], 403);
         }
     }
 
@@ -105,9 +105,13 @@ class MessageEncryptorController extends Controller
 
         if($encryptedEmail){
             $encryptedEmail->delete();
-            return redirect()->back()->with('success', 'Encrypted email deleted successfully');
+            return response()->json([
+                'message' => 'Encrypted email deleted successfully'
+            ], 200);
         } else {
-            return redirect()->back()->with('error', 'Unauthorized to delete this encrypted email');
+            return response()->json([
+                'message' => 'You are not allowed to perform this operation'
+            ], 403);
         }
     }
 }
