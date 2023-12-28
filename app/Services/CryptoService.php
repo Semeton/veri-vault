@@ -10,7 +10,7 @@ class CryptoService
 
     public function __construct()
     {
-        $this->key = "SECRET";
+        $this->key = env('ENCRYPTION_KEY');
     }
 
     public function encrypt(string $message, string $secretCode): string

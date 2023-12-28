@@ -22,19 +22,19 @@
                     d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
             </svg>
             <h2 class="ms-3 text-xl font-semibold text-gray-900 dark:text-white">
-                <a href="{{ route('encryptedMessages') }}">Encrypted Messages</a>
+                <a href="{{ route('encryptAndSendMail') }}">Emails</a>
             </h2>
         </div>
 
         <p class="mt-4 text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
-            View and managing all encrypted messages and documents. Users have the ability to set permissions and access
-            the encrypted messages and documents as needed.
+            Send and managing all encrypted enail and documents. Users have the ability to set permissions and access
+            the encrypted enail and documents as needed.
         </p>
 
         <p class="mt-4 text-sm">
-            <a href="{{ route('encryptedMessages') }}"
+            <a href="{{ route('encryptAndSendMail') }}"
                 class="inline-flex items-center font-semibold text-indigo-700 dark:text-indigo-300">
-                Manage encrypted messages
+                Send and manage encrypted emails
 
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
                     class="ms-1 w-5 h-5 fill-indigo-500 dark:fill-indigo-200">
@@ -54,19 +54,19 @@
                     d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
             </svg>
             <h2 class="ms-3 text-xl font-semibold text-gray-900 dark:text-white">
-                <a href="{{ route('encryptAndSendMail') }}">Emails</a>
+                <a href="{{ route('encryptedMessages') }}">Encrypted Messages</a>
             </h2>
         </div>
 
         <p class="mt-4 text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
-            Send and managing all encrypted enail and documents. Users have the ability to set permissions and access
-            the encrypted enail and documents as needed.
+            View and managing all encrypted messages and documents. Users have the ability to set permissions and access
+            the encrypted messages and documents as needed.
         </p>
 
         <p class="mt-4 text-sm">
-            <a href="{{ route('encryptAndSendMail') }}"
+            <a href="{{ route('encryptedMessages') }}"
                 class="inline-flex items-center font-semibold text-indigo-700 dark:text-indigo-300">
-                Send and manage encrypted emails
+                Manage encrypted messages
 
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
                     class="ms-1 w-5 h-5 fill-indigo-500 dark:fill-indigo-200">
