@@ -28,6 +28,10 @@ Route::get('/', function (Request $request) {
     return view('home', ['data' => $info]);
 })->name('home');
 
+Route::get('/developer/docs', function () {
+    return view('docs.index');
+})->name('docs');
+
 Route::get('/email/{uuid}', [EncryptedEmailController::class, 'getSecret'])->name('viewEncryptedEmail');
 Route::post('/email/{uuid}', [EncryptedEmailController::class, 'decryptEmail'])->name('revealEncryptedMessage');
 
