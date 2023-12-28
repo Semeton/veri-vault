@@ -36,7 +36,7 @@ Route::prefix('v1')->group(function () {
     Route::middleware(['auth:sanctum'])->group(function(){
         Route::prefix('tokens')->group(function () {
             Route::get('/', [PersonalAccessTokenController::class, 'index']);
-            Route::post('/create', [PersonalAccessTokenController::class, 'create']);
+            Route::post('/', [PersonalAccessTokenController::class, 'create']);
         });
         
         Route::prefix('documents')->group(function () {
@@ -44,7 +44,9 @@ Route::prefix('v1')->group(function () {
             Route::post('/', [MessageEncryptorController::class, 'store']);
             Route::put('/{uuid}', [MessageEncryptorController::class, 'update']);
             Route::delete('/{uuid}', [MessageEncryptorController::class, 'destroy']);
-            Route::post('/decrypt', [MessageDecryptorController::class, 'decryptMessage']);
+            Route::prefix('decrypt')->group( function () {
+                Route::post('/', [MessageDecryptorController::class, 'decryptMessage']);
+            });
         });
     });
 });
