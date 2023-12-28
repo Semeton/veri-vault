@@ -106,7 +106,7 @@ class MessageEncryptorController extends Controller
         }
     }
 
-    public function delete(string $uuid)
+    public function delete(string $uuid, Request $request)
     {
         try{
                 $encryptedEmail = EncryptedMessages::where('uuid', $uuid)
@@ -114,10 +114,19 @@ class MessageEncryptorController extends Controller
                 ->first();
 
             if($encryptedEmail){
-                $encryptedEmail->delete();
-                return response()->json([
-                    'message' => 'Encrypted email deleted successfully'
-                ], 200);
+                $bearerToken = $request->bearerToken();
+                if ($bearerToken && $request->user()->tokenCan('delete')) {
+                    $encryptedEmail->delete();
+                    return response()->json([
+                        'message' => 'Encrypted email deleted successfully'
+                    ]);
+                } else {
+                    return response()->json([
+                        'error' => 'Unauthorized',
+                        'message' => 'You are not allowed to perform this operation'
+                    ], 403);
+                }
+                
             } else {
                 return response()->json([
                     'error' => 'Unauthorized',
