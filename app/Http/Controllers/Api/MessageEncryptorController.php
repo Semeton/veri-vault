@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Services\EncryptRequestService;
 use App\Livewire\Messages\EncryptedMessages;
+use Exception;
 
 class MessageEncryptorController extends Controller
 {
@@ -29,6 +30,7 @@ class MessageEncryptorController extends Controller
             ]);
         } else {
             return response()->json([
+                'error' => 'Unauthorized',
                 'message' => 'You are not allowed to perform this operation'
             ], 403);
         }
@@ -64,12 +66,12 @@ class MessageEncryptorController extends Controller
                 ]);
             } else {
                 return response()->json([
+                    'error' => 'Unauthorized',
                     'message' => 'You are not allowed to perform this operation'
                 ], 403);
             }
         }else{
             $encryptedContent = $this->cryptoService->encrypt($validatedData['body'], $validatedData['secret']);
-    
             return response()->json([
                 'encypted' => $encryptedContent,
             ]);
@@ -78,40 +80,54 @@ class MessageEncryptorController extends Controller
 
     public function update(Request $request, string $uuid)
     {
-        $data = $request->validate([
-            'title' => 'required|string',
-            'body' => 'required|string',
-            'secret' => 'required|string',
-        ]);
-
-        $bearerToken = $request->bearerToken();
-        if ($bearerToken && $request->user()->tokenCan('update')) {
-            $encryptedContent = $this->encryptRequestService->encryptAndUpdateDocument($request->user(), $data, $uuid);
-            return response()->json([
-                'document' => $encryptedContent,
+        try{
+            $data = $request->validate([
+                'title' => 'required|string',
+                'body' => 'required|string',
+                'secret' => 'required|string',
             ]);
-        } else {
+
+            $bearerToken = $request->bearerToken();
+            if ($bearerToken && $request->user()->tokenCan('update')) {
+                $encryptedContent = $this->encryptRequestService->encryptAndUpdateDocument($request->user(), $data, $uuid);
+                return response()->json([
+                    'document' => $encryptedContent,
+                ]);
+            } else {
+                return response()->json([
+                    'error' => 'Unauthorized',
+                    'message' => 'You are not allowed to perform this operation'
+                ], 403);
+            }
+        } catch (Exception $e){
             return response()->json([
-                'message' => 'You are not allowed to perform this operation'
-            ], 403);
+                'message' => $e->getMessage()
+            ]);
         }
     }
 
     public function delete(string $uuid)
     {
-        $encryptedEmail = EncryptedMessages::where('uuid', $uuid)
-            ->where('user_id', Auth::id())
-            ->first();
+        try{
+                $encryptedEmail = EncryptedMessages::where('uuid', $uuid)
+                ->where('user_id', Auth::id())
+                ->first();
 
-        if($encryptedEmail){
-            $encryptedEmail->delete();
+            if($encryptedEmail){
+                $encryptedEmail->delete();
+                return response()->json([
+                    'message' => 'Encrypted email deleted successfully'
+                ], 200);
+            } else {
+                return response()->json([
+                    'error' => 'Unauthorized',
+                    'message' => 'You are not allowed to perform this operation'
+                ], 403);
+            }
+        } catch (Exception $e){
             return response()->json([
-                'message' => 'Encrypted email deleted successfully'
-            ], 200);
-        } else {
-            return response()->json([
-                'message' => 'You are not allowed to perform this operation'
-            ], 403);
+                'message' => $e->getMessage()
+            ]);
         }
-    }
+    }    
 }
