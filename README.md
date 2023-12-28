@@ -28,8 +28,11 @@ The SecureMessaging app is a privacy-focused application that enables users to e
 
 1. Clone the repository: `git clone https://github.com/Semeton/veri_vault.git`
 2. Install dependencies: `composer install && npm install`
-3. Set up the database: `php artisan migrate`
-4. Run the development server: `php artisan serve`
+3. Creat the env file: `cp .env.example .env`
+4. Set up the application key: `php artisan key:generate`
+5. Set up the encryption key: `php artisan create:encryption-key`
+6. Set up the database: `php artisan migrate`
+7. Run the development server: `php artisan serve`
 
 ## Contribution Guidelines
 
