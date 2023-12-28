@@ -49,7 +49,7 @@ class MessageEncryptorController extends Controller
                 return response()->json([
                     'message' => 'The title field is required',
                     'errors' => ['title' => 'The title field is required'],
-                ], 422);
+                ], 400);
             }
             
             $data = [

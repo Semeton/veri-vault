@@ -33,15 +33,23 @@ class PersonalAccessTokenController extends Controller
     public function create(Request $request)
     {
         try{
-            $validatedData = $request->validate([
+            $validator = validator($request->all(), [
                 'token_name' => 'required|string',
                 'abilities' => 'required'
             ]);
-            $abilities = explode(',', $validatedData['abilities']);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'error' => 'Validation Error',
+                    'message' => $validator->errors()
+                ], 400);
+            }
+
+            $abilities = explode(',', $request->abilities);
             $bearerToken = $request->bearerToken();
             if ($bearerToken && $request->user()->tokenCan('*')) {
                 $token = $request->user()->createToken($request->token_name, $abilities);
-            return response()->json(['token' => $token->plainTextToken], 201);
+                return response()->json(['token' => $token->plainTextToken], 201);
             } else {
                 return response()->json([
                     'error' => 'Unauthorized',
@@ -49,6 +57,7 @@ class PersonalAccessTokenController extends Controller
                 ], 403);
             }
         } catch (Exception $e){
+            dd($e);
             return response()->json([
                 'message' => $e->getMessage()
             ]);
