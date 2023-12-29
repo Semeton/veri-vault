@@ -111,9 +111,28 @@
         <!-- Container wrapper -->
     </nav>
     <!-- Navbar -->  --}}
+    @if (Route::has('login'))
+        <div class="sm:fixed sm:top-0 sm:right-0 p-6 text-right z-10">
+            @auth
+                <a href="{{ url('/dashboard') }}"
+                    class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-indigo-500">Dashboard</a>
+            @else
+                <a href="{{ route('home') }}"
+                    class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-indigo-500">Home</a>
 
+                <a href="{{ route('login') }}"
+                    class="ml-4 font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-indigo-500">Log
+                    in</a>
+
+                @if (Route::has('register'))
+                    <a href="{{ route('register') }}"
+                        class="ml-4 font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-indigo-500">Register</a>
+                @endif
+            @endauth
+        </div>
+    @endif
     <!-- Jumbotron -->
-    <div class="px-6 py-12 text-center md:px-12 lg:py-24 lg:text-left">
+    <div class="px-6 md:py-12 text-center md:px-12 lg:py-24 lg:text-left">
         <div class="w-100 mx-auto text-neutral-800 sm:max-w-2xl md:max-w-3xl lg:max-w-5xl xl:max-w-7xl">
             <div class="grid items-center gap-12 lg:grid-cols-2">
                 <div class="mt-12 lg:mt-0" style="z-index: 10">

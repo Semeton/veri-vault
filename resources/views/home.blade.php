@@ -54,7 +54,7 @@
         </div>
         <div
             class="mt-6 p-6 bg-white dark:bg-gray-800/50 dark:bg-gradient-to-bl from-gray-700/50 via-transparent dark:ring-1 dark:ring-inset dark:ring-white/5 rounded-lg shadow-2xl shadow-gray-500/20 dark:shadow-none motion-safe:hover:scale-[1.01] transition-all duration-250 focus:outline focus:outline-2 focus:outline-red-500">
-            <form class="flex items-center justify-between">
+            <form class="md:flex items-center justify-between">
                 <div class="flex">
                     <div
                         class="h-16 w-16 bg-indigo-50 dark:bg-indigo-800/20 flex items-center justify-center rounded-full mr-4">
@@ -68,9 +68,10 @@
                     </h2>
                 </div>
                 {{--  <label for="showEncryptionKey" class="">Generate a random secret key</label>  --}}
-                <input type="text" id="secretKey" class="w-96 p-2 border border-gray-300 rounded-md" readonly>
+                <input type="text" id="secretKey" class="md:w-96 w-full p-2 border border-gray-300 rounded-md my-3 mr-4"
+                    readonly>
                 <button type="button" onclick="generateSecretKey()"
-                    class="items-center px-4 py-3 !bg-indigo-700 !bg-indigo-700 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-800 focus:bg-indigo-800 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-indigo-800 transition ease-in-out duration-150 w-56">Generate</button>
+                    class="items-center px-4 py-3 !bg-indigo-700 !bg-indigo-700 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-800 focus:bg-indigo-800 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-indigo-800 transition ease-in-out duration-150 w-full md:w-56">Generate</button>
             </form>
         </div>
     </div>
