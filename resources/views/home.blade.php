@@ -67,7 +67,6 @@
                     <h2 class="mt-4 text-xl font-semibold text-gray-900 dark:text-white">Generate a random secret key
                     </h2>
                 </div>
-                {{--  <label for="showEncryptionKey" class="">Generate a random secret key</label>  --}}
                 <input type="text" id="secretKey" class="md:w-96 w-full p-2 border border-gray-300 rounded-md my-3 mr-4"
                     readonly>
                 <button type="button" onclick="generateSecretKey()"
