@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Services\EncryptRequestService;
 use App\Livewire\Messages\EncryptedMessages;
+use App\Models\Document;
 use Exception;
 
 class MessageEncryptorController extends Controller
@@ -106,10 +107,10 @@ class MessageEncryptorController extends Controller
         }
     }
 
-    public function delete(string $uuid, Request $request)
+    public function destroy(string $uuid, Request $request)
     {
         try{
-                $encryptedEmail = EncryptedMessages::where('uuid', $uuid)
+                $encryptedEmail = Document::where('uuid', $uuid)
                 ->where('user_id', Auth::id())
                 ->first();
 
