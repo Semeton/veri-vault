@@ -34,7 +34,7 @@
                             </div>
                         @endif
 
-                        <button class="cursor-pointer ms-6 text-sm text-red-500" {{--  wire:click="confirmApiTokenDeletion({{ $token->id }})"  --}}>
+                        <button class="cursor-pointer ms-6 text-sm text-red-500" {{--  wire:click="confirmApiTokenDeletion({{ $token->id }})"  --}} hidden>
                             {{ __('Delete') }}
                         </button>
                     </div>

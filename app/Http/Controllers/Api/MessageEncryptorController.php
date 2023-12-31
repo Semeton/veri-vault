@@ -8,7 +8,6 @@ use App\Services\CryptoService;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Services\EncryptRequestService;
-use App\Livewire\Messages\EncryptedMessages;
 use App\Models\Document;
 use Exception;
 
@@ -63,7 +62,8 @@ class MessageEncryptorController extends Controller
             if ($bearerToken && $request->user()->tokenCan('create')) {
                 $encryptedContent = $this->encryptRequestService->encryptAndStoreDocument($request->user(), $data);
                 return response()->json([
-                    'document' => $encryptedContent,
+                    'message' => 'Document encrypted successfully',
+                    // 'document' => $encryptedContent,
                 ]);
             } else {
                 return response()->json([
@@ -79,7 +79,7 @@ class MessageEncryptorController extends Controller
         }
     }
 
-    public function update(Request $request, string $uuid)
+    public function update(string $uuid, Request $request)
     {
         try{
             $data = $request->validate([
@@ -91,9 +91,22 @@ class MessageEncryptorController extends Controller
             $bearerToken = $request->bearerToken();
             if ($bearerToken && $request->user()->tokenCan('update')) {
                 $encryptedContent = $this->encryptRequestService->encryptAndUpdateDocument($request->user(), $data, $uuid);
-                return response()->json([
-                    'document' => $encryptedContent,
-                ]);
+                if(!$encryptedContent){
+                    return response()->json([
+                        'error' => 'NotFound',
+                        'message' => 'Document does not exist',
+                        'details' => [
+                            'request' => 'Update encrypted document',
+                            'uuid' => $uuid
+                        ]
+                    ], 404);
+                } else {
+                    $document = Document::where('uuid', $uuid)->first();
+                    return response()->json([
+                        'message' => 'Document updated successfully',
+                        'document' => $document,
+                    ]);
+                }
             } else {
                 return response()->json([
                     'error' => 'Unauthorized',
@@ -119,7 +132,7 @@ class MessageEncryptorController extends Controller
                 if ($bearerToken && $request->user()->tokenCan('delete')) {
                     $encryptedEmail->delete();
                     return response()->json([
-                        'message' => 'Encrypted email deleted successfully'
+                        'message' => 'Encrypted document deleted successfully'
                     ]);
                 } else {
                     return response()->json([
