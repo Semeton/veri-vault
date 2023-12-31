@@ -31,25 +31,17 @@ class EncryptRequestService {
         return $document;
     }
 
-    public function encryptAndUpdateDocument(User $user, Array $data, string $uuid): bool
+    public function encryptAndUpdateDocument(User $user, Array $data, string $uuid): Document
     {
-        $exist = Document::where('uuid', $uuid)->get();
-        // dd(count($exist));
-        if(count($exist) > 0){
-            $encryptedContent = $this->cryptoService->encrypt($data['body'], $data['secret']);
-    
-            $user->documents()->where('uuid', $uuid)->update([
-                'title' => $data['title'],
-                'encrypted_content' => $encryptedContent,
-            ]);
-    
-            $document = Document::where('uuid', $uuid)->first();
-    
-            return true;
-            
-        } else {
-            return false;
-            
-        }
+        $encryptedContent = $this->cryptoService->encrypt($data['body'], $data['secret']);
+
+        $user->documents()->where('uuid', $uuid)->update([
+            'title' => $data['title'],
+            'encrypted_content' => $encryptedContent,
+        ]);
+
+        $document = Document::where('uuid', $uuid)->first();
+
+        return $document;
     }
 }

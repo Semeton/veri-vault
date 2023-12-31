@@ -88,31 +88,33 @@ class MessageEncryptorController extends Controller
                 'secret' => 'required|string',
             ]);
 
-            $bearerToken = $request->bearerToken();
-            if ($bearerToken && $request->user()->tokenCan('update')) {
-                $encryptedContent = $this->encryptRequestService->encryptAndUpdateDocument($request->user(), $data, $uuid);
-                if(!$encryptedContent){
-                    return response()->json([
+            $exist = Document::where('uuid', $uuid)->get();
+
+            if(count($exist) == 0){
+                return response()->json([
                         'error' => 'NotFound',
                         'message' => 'Document does not exist',
                         'details' => [
                             'request' => 'Update encrypted document',
                             'uuid' => $uuid
                         ]
-                    ], 404);
-                } else {
-                    $document = Document::where('uuid', $uuid)->first();
+                ], 404);
+            } else {
+                $bearerToken = $request->bearerToken();
+                if ($bearerToken && $request->user()->tokenCan('update')) {
+                    $encryptedContent = $this->encryptRequestService->encryptAndUpdateDocument($request->user(), $data, $uuid);
                     return response()->json([
                         'message' => 'Document updated successfully',
-                        'document' => $document,
+                        'document' => $encryptedContent,
                     ]);
+                } else {
+                    return response()->json([
+                        'error' => 'Unauthorized',
+                        'message' => 'You are not allowed to perform this operation'
+                    ], 403);
                 }
-            } else {
-                return response()->json([
-                    'error' => 'Unauthorized',
-                    'message' => 'You are not allowed to perform this operation'
-                ], 403);
             }
+
         } catch (Exception $e){
             return response()->json([
                 'message' => $e->getMessage()
@@ -123,7 +125,7 @@ class MessageEncryptorController extends Controller
     public function destroy(string $uuid, Request $request)
     {
         try{
-                $encryptedEmail = Document::where('uuid', $uuid)
+            $encryptedEmail = Document::where('uuid', $uuid)
                 ->where('user_id', Auth::id())
                 ->first();
 
