@@ -6,4 +6,3 @@
     </x-mail::button>
     <p>Thanks,<br>{{ config('app.name') }}</p>
 </x-mail::message>
-```
