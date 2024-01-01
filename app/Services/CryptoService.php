@@ -15,7 +15,7 @@ class CryptoService
 
     public function encrypt(string $message, string $secretCode): string
     {
-        $nonce = random_bytes(SODIUM_CRYPTO_SECRETBOX_NONCEBYTES);
+        $nonce = random_bytes(24);
 
         $cipher = base64_encode(
             $nonce.
@@ -36,8 +36,8 @@ class CryptoService
     {
         try {
             $decoded = base64_decode($encrypted);
-            $nonce = mb_substr($decoded, 0, SODIUM_CRYPTO_SECRETBOX_NONCEBYTES, '8bit');
-            $ciphertext = mb_substr($decoded, SODIUM_CRYPTO_SECRETBOX_NONCEBYTES, null, '8bit');
+            $nonce = mb_substr($decoded, 0, 24, '8bit');
+            $ciphertext = mb_substr($decoded, 24, null, '8bit');
 
             try {
                 $plain = sodium_crypto_secretbox_open(
