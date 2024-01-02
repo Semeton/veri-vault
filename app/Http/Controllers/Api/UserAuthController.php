@@ -37,6 +37,11 @@ class UserAuthController extends Controller
         if (Auth::attempt($credentials)) {
             $token = $request->user()->createToken('auth_token')->plainTextToken;
             return response()->json(['token' => $token], 200);
+        } else {
+            return response()->json([
+                'error' => 'dataMismatch',
+                'message' => 'Invalid credentials'
+            ], 401);
         }
 
     }
