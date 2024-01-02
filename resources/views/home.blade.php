@@ -65,7 +65,7 @@
                     </h2>
                 </div>
                 <input type="text" id="secretKey"
-                    class="md:w-96 w-full p-2 border-indigo-900 rounded-md my-3 mr-4 bg-gray-900 focus:border-indigo-600"
+                    class="md:w-96 w-full p-2 border-indigo-900 rounded-md my-3 mr-4 bg-gray-900 focus:border-indigo-600 text-white"
                     readonly>
                 <button type="button" onclick="generateSecretKey()"
                     class="items-center px-4 py-3 !bg-indigo-700 !bg-indigo-700 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-800 focus:bg-indigo-800 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-indigo-800 transition ease-in-out duration-150 w-full md:w-56">Generate</button>

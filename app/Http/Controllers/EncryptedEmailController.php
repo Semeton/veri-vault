@@ -30,7 +30,7 @@ class EncryptedEmailController extends Controller
         if($exists){
             return view('messages.emails.view', ['uuid' => $uuid]);
         } else {
-            return redirect('home')->with('error', 'Problem dey');
+            return redirect('home')->with('error', 'A problem was encountered');
         }
     }
 
@@ -45,7 +45,8 @@ class EncryptedEmailController extends Controller
 
         $error = explode(':', $decryptedBody)[0];
         if ($error === 'Error') {
-            dd($decryptedBody);
+            return redirect()->back()->with('error', $decryptedBody);
+            // dd($decryptedBody);
         } else {
             return view('messages.emails.reveal', ['decryptedBody' => $decryptedBody]);
         }
