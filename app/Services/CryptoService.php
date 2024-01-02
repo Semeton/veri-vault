@@ -6,7 +6,7 @@ namespace App\Services;
 
 class CryptoService
 {
-    private $key;
+    private string $key;
 
     public function __construct()
     {
