@@ -115,18 +115,18 @@
         <div class="sm:fixed sm:top-0 sm:right-0 p-6 text-right z-10">
             @auth
                 <a href="{{ url('/dashboard') }}"
-                    class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-indigo-500">Dashboard</a>
+                    class="font-semibold text-gray-400 hover:text-white dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-indigo-500">Dashboard</a>
             @else
                 <a href="{{ route('home') }}"
-                    class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-indigo-500">Home</a>
+                    class="font-semibold text-gray-400 hover:text-white dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-indigo-500">Home</a>
 
                 <a href="{{ route('login') }}"
-                    class="ml-4 font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-indigo-500">Log
+                    class="ml-4 font-semibold text-gray-400 hover:text-white dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-indigo-500">Log
                     in</a>
 
                 @if (Route::has('register'))
                     <a href="{{ route('register') }}"
-                        class="ml-4 font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-indigo-500">Register</a>
+                        class="ml-4 font-semibold text-gray-400 hover:text-white dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-indigo-500">Register</a>
                 @endif
             @endauth
         </div>
@@ -156,7 +156,7 @@
                     <div id="radius-shape-1" class="absolute rounded-full shadow-lg"></div>
                     <div id="radius-shape-2" class="absolute shadow-lg"></div>
                     <div
-                        class="relative bg-[hsla(0,0%,100%,0.9)] backdrop-blur-[25px] backdrop-saturate-[200%] block rounded-lg px-6 py-12 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-[hsla(0,0%,15%,0.9)] dark:shadow-black/20 md:px-12 bg-dots-darker motion-safe:hover:scale-[1.01] transition-all duration-250">
+                        class="relative backdrop-blur-[25px] backdrop-saturate-[200%] block rounded-lg px-6 py-12 bg-gray-800 bg-opacity-95 shadow-black/20 md:px-12 bg-dots-darker motion-safe:hover:scale-[1.01] transition-all duration-250">
                         <div class="animate-bounce text-indigo-300">
                             <i class="fa fa-user-secret fa-10x pt-8" aria-hidden="true" style="font-size: 200px;"></i>
                         </div>
