@@ -125,29 +125,43 @@ class MessageEncryptorController extends Controller
     public function destroy(string $uuid, Request $request)
     {
         try{
-            $encryptedEmail = Document::where('uuid', $uuid)
-                ->where('user_id', Auth::id())
-                ->first();
+            
+            $exist = Document::where('uuid', $uuid)->get();
 
-            if($encryptedEmail){
-                $bearerToken = $request->bearerToken();
-                if ($bearerToken && $request->user()->tokenCan('delete')) {
-                    $encryptedEmail->delete();
-                    return response()->json([
-                        'message' => 'Encrypted document deleted successfully'
-                    ]);
+            if(count($exist) == 0){
+                return response()->json([
+                        'error' => 'NotFound',
+                        'message' => 'Document does not exist',
+                        'details' => [
+                            'request' => 'Update encrypted document',
+                            'uuid' => $uuid
+                        ]
+                ], 404);
+            } else {
+                $encryptedEmail = Document::where('uuid', $uuid)
+                    ->where('user_id', Auth::id())
+                    ->first();
+
+                if($encryptedEmail){
+                    $bearerToken = $request->bearerToken();
+                    if ($bearerToken && $request->user()->tokenCan('delete')) {
+                        $encryptedEmail->delete();
+                        return response()->json([
+                            'message' => 'Encrypted document deleted successfully'
+                        ]);
+                    } else {
+                        return response()->json([
+                            'error' => 'Unauthorized',
+                            'message' => 'You are not allowed to perform this operation'
+                        ], 403);
+                    }
+                    
                 } else {
                     return response()->json([
                         'error' => 'Unauthorized',
                         'message' => 'You are not allowed to perform this operation'
                     ], 403);
                 }
-                
-            } else {
-                return response()->json([
-                    'error' => 'Unauthorized',
-                    'message' => 'You are not allowed to perform this operation'
-                ], 403);
             }
         } catch (Exception $e){
             return response()->json([
