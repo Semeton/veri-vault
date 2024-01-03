@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "26f7ad37d828c0175e6beb7abb2396eb",
+    "content-hash": "e9067a6ead32b1e3cedf3d69d60ca39d",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -4569,6 +4569,60 @@
                 }
             ],
             "time": "2023-11-08T05:53:05+00:00"
+        },
+        {
+            "name": "semeton/crypto-service",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Semeton/crypto-service.git",
+                "reference": "e51687851961acda69258e73ef1409fb87147e6d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Semeton/crypto-service/zipball/e51687851961acda69258e73ef1409fb87147e6d",
+                "reference": "e51687851961acda69258e73ef1409fb87147e6d",
+                "shasum": ""
+            },
+            "require": {
+                "ext-sodium": "*",
+                "php": ">=8.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^10.5"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Semeton\\CryptoService\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Semeton Balogun",
+                    "email": "balogunsemeton@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "This package provides a simple and secure way to encrypt and decrypt messages in Laravel applications. It uses Sodium cryptographic library for encryption and decryption, ensuring high-level security. The package is easy to integrate into any Laravel application and requires minimal configuration. It's an excellent choice for applications that need to securely store or transmit sensitive information.",
+            "keywords": [
+                "decryption",
+                "encryption",
+                "laravel",
+                "security",
+                "sodium"
+            ],
+            "support": {
+                "email": "balogunsemeton@gmail.com",
+                "issues": "https://github.com/semeton/crypto-service/issues",
+                "source": "https://github.com/semeton/crypto-service"
+            },
+            "time": "2024-01-03T21:51:34+00:00"
         },
         {
             "name": "symfony/console",
@@ -10473,7 +10527,7 @@
         }
     ],
     "aliases": [],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
