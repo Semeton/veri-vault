@@ -4,8 +4,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta property="twitter:image" content="https://ibb.co/MchdVLB">
-    <meta property="og:image" content="https://ibb.co/MchdVLB">
+    <meta property="twitter:image" content="https://i.ibb.co/6HZQP5X/Screenshot-2024-01-03-at-22-41-08.png">
+    <meta property="og:image" content="https://i.ibb.co/6HZQP5X/Screenshot-2024-01-03-at-22-41-08.png">
     <meta property="og:title" content="{{ env('APP_NAME') }}">
     <meta property="twitter:title" content="{{ env('APP_NAME') }}">
     <meta property="og:description"
