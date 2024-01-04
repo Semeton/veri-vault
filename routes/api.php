@@ -45,6 +45,7 @@ Route::prefix('v1')->group(function () {
             Route::put('/{uuid}', [MessageEncryptorController::class, 'update']);
             Route::delete('/{uuid}', [MessageEncryptorController::class, 'destroy']);
             Route::prefix('decrypt')->group( function () {
+                Route::post('/{uuid}', [MessageDecryptorController::class, 'decryptWithUuid']);
                 Route::post('/', [MessageDecryptorController::class, 'decryptMessage']);
             });
         });
