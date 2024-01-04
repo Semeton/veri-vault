@@ -4,6 +4,10 @@
 
 The SecureMessaging app is a privacy-focused application that enables users to encrypt and decrypt messages using a zero-knowledge-proof mechanism built on top of sodium hashing. Users can create a special secret code that serves as the key for encryption and decryption processes.
 
+## API Documentation
+
+Link to the [API documentation](https://documenter.getpostman.com/view/19842116/2s9YsGhD6t)
+
 ## Features
 
 -   **Message Encryption/Decryption:** Encrypt and decrypt messages securely using user-generated secret codes.
