@@ -4,6 +4,16 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="image" content="{{ asset('preview.png') }}">
+    <meta property="og:image" content="{{ asset('preview.png') }}">
+    <meta property="og:title" content="{{ env('APP_NAME') }}">
+    <meta property="title" content="{{ env('APP_NAME') }}">
+    <meta property="og:description"
+        content="The SecureMessaging app is a privacy-focused application that enables users to encrypt and decrypt messages using a zero-knowledge-proof mechanism built on top of sodium hashing. Users can create a special secret code that serves as the key for encryption and decryption processes.">
+    <meta name="description"
+        content="The SecureMessaging app is a privacy-focused application that enables users to encrypt and decrypt messages using a zero-knowledge-proof mechanism built on top of sodium hashing. Users can create a special secret code that serves as the key for encryption and decryption processes.">
+    <meta name="keywords"
+        content="Message Encryption, Decryption, SecureMessaging, privacy-focused application, zero-knowledge-proof, sodium hashing, secret code">
 
     <title>{{ env('APP_NAME') }}</title>
 
