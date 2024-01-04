@@ -51,6 +51,20 @@ class MessageEncryptorController extends Controller
                     'errors' => ['title' => 'The title field is required'],
                 ], 400);
             }
+
+            if(gettype($request['persist']) !== 'boolean'){
+                return response()->json([
+                    'error' => 'typeError',
+                    'message' => 'Invalid persist value. It should be a boolean.'
+                ], 400);
+            }
+
+            if(!$request['persist']){
+                return response()->json([
+                    'error' => 'typeError',
+                    'message' => 'The `persist` field must be set to `true`'
+                ], 400);
+            }
             
             $data = [
                 'title' => $request['title'],
