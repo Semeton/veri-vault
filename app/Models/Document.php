@@ -17,6 +17,11 @@ class Document extends Model
         'uuid'
     ];
 
+    protected $hidden = [
+        'id',
+        'user_id'
+    ];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
