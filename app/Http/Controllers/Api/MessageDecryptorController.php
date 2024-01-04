@@ -62,11 +62,19 @@ class MessageDecryptorController extends Controller
                     'message' => "No document found with the provided UUID for this user"
                 ], 404);
             }
+            $bearerToken = $request->bearerToken();
+            if ($bearerToken && $request->user()->tokenCan('read')) {
+                $decryptedContent = $this->cryptoService->decrypt($encryptedDocument, $request['secret']);
+                
+                return response()->json([
+                    'document' => $decryptedContent,
+                ]);
+            } else {
+                return response()->json([
+                    'message' => 'You are not allowed to perform this operation'
+                ], 401);
+            }
             
-            $decryptedContent = $this->cryptoService->decrypt($encryptedDocument, $request['secret']);
-            return response()->json([
-                'document' => $decryptedContent,
-            ]);
             
         } catch (Exception $e){
             return response()->json([
