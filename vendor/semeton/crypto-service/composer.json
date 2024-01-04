@@ -1,0 +1,38 @@
+{
+  "name": "semeton/crypto-service",
+  "description": "This package provides a simple and secure way to encrypt and decrypt messages in Laravel applications. It uses Sodium cryptographic library for encryption and decryption, ensuring high-level security. The package is easy to integrate into any Laravel application and requires minimal configuration. It's an excellent choice for applications that need to securely store or transmit sensitive information.",
+  "type": "library",
+  "license": "MIT",
+  "keywords": [
+    "encryption",
+    "decryption",
+    "security",
+    "laravel",
+    "sodium"
+  ],
+  "autoload": {
+    "psr-4": {
+      "Semeton\\CryptoService\\": "src/"
+    }
+  },
+  "authors": [
+    {
+      "name": "Semeton Balogun",
+      "email": "balogunsemeton@gmail.com",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": ">=8.0",
+    "ext-sodium": "*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^10.5"
+  },
+  "support": {
+    "email": "balogunsemeton@gmail.com",
+    "issues": "https://github.com/semeton/crypto-service/issues",
+    "source": "https://github.com/semeton/crypto-service"
+  },
+  "version": "1.0.0"
+}

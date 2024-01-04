@@ -101,6 +101,7 @@ class ComposerStaticInitece106bcd651ed4d7d7287c96ebdb4e3
             'Spatie\\Ignition\\' => 16,
             'Spatie\\FlareClient\\' => 19,
             'Spatie\\Backtrace\\' => 17,
+            'Semeton\\CryptoService\\' => 22,
         ),
         'R' => 
         array (
@@ -388,6 +389,10 @@ class ComposerStaticInitece106bcd651ed4d7d7287c96ebdb4e3
         array (
             0 => __DIR__ . '/..' . '/spatie/backtrace/src',
         ),
+        'Semeton\\CryptoService\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/semeton/crypto-service/src',
+        ),
         'Ramsey\\Uuid\\' => 
         array (
             0 => __DIR__ . '/..' . '/ramsey/uuid/src',
@@ -495,8 +500,8 @@ class ComposerStaticInitece106bcd651ed4d7d7287c96ebdb4e3
         ),
         'League\\Uri\\' => 
         array (
-            0 => __DIR__ . '/..' . '/league/uri-interfaces',
-            1 => __DIR__ . '/..' . '/league/uri',
+            0 => __DIR__ . '/..' . '/league/uri',
+            1 => __DIR__ . '/..' . '/league/uri-interfaces',
         ),
         'League\\OAuth2\\Server\\' => 
         array (
@@ -710,12 +715,20 @@ class ComposerStaticInitece106bcd651ed4d7d7287c96ebdb4e3
         'App\\Actions\\Jetstream\\InviteTeamMember' => __DIR__ . '/../..' . '/app/Actions/Jetstream/InviteTeamMember.php',
         'App\\Actions\\Jetstream\\RemoveTeamMember' => __DIR__ . '/../..' . '/app/Actions/Jetstream/RemoveTeamMember.php',
         'App\\Actions\\Jetstream\\UpdateTeamName' => __DIR__ . '/../..' . '/app/Actions/Jetstream/UpdateTeamName.php',
+        'App\\Console\\Commands\\CreateEncryptionKey' => __DIR__ . '/../..' . '/app/Console/Commands/CreateEncryptionKey.php',
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
+        'App\\Http\\Controllers\\ApiKeyController' => __DIR__ . '/../..' . '/app/Http/Controllers/ApiKeyController.php',
+        'App\\Http\\Controllers\\Api\\MessageDecryptorController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/MessageDecryptorController.php',
+        'App\\Http\\Controllers\\Api\\MessageEncryptorController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/MessageEncryptorController.php',
+        'App\\Http\\Controllers\\Api\\PersonalAccessTokenController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/PersonalAccessTokenController.php',
         'App\\Http\\Controllers\\Api\\UserAuthController' => __DIR__ . '/../..' . '/app/Http/Controllers/Api/UserAuthController.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
+        'App\\Http\\Controllers\\EncryptedEmailController' => __DIR__ . '/../..' . '/app/Http/Controllers/EncryptedEmailController.php',
+        'App\\Http\\Controllers\\EncryptedMessagesController' => __DIR__ . '/../..' . '/app/Http/Controllers/EncryptedMessagesController.php',
         'App\\Http\\Kernel' => __DIR__ . '/../..' . '/app/Http/Kernel.php',
         'App\\Http\\Middleware\\Authenticate' => __DIR__ . '/../..' . '/app/Http/Middleware/Authenticate.php',
+        'App\\Http\\Middleware\\AuthenticateApiKey' => __DIR__ . '/../..' . '/app/Http/Middleware/AuthenticateApiKey.php',
         'App\\Http\\Middleware\\EncryptCookies' => __DIR__ . '/../..' . '/app/Http/Middleware/EncryptCookies.php',
         'App\\Http\\Middleware\\PreventRequestsDuringMaintenance' => __DIR__ . '/../..' . '/app/Http/Middleware/PreventRequestsDuringMaintenance.php',
         'App\\Http\\Middleware\\RedirectIfAuthenticated' => __DIR__ . '/../..' . '/app/Http/Middleware/RedirectIfAuthenticated.php',
@@ -724,15 +737,18 @@ class ComposerStaticInitece106bcd651ed4d7d7287c96ebdb4e3
         'App\\Http\\Middleware\\TrustProxies' => __DIR__ . '/../..' . '/app/Http/Middleware/TrustProxies.php',
         'App\\Http\\Middleware\\ValidateSignature' => __DIR__ . '/../..' . '/app/Http/Middleware/ValidateSignature.php',
         'App\\Http\\Middleware\\VerifyCsrfToken' => __DIR__ . '/../..' . '/app/Http/Middleware/VerifyCsrfToken.php',
-        'App\\Models\\AccessPermission' => __DIR__ . '/../..' . '/app/Models/AccessPermission.php',
+        'App\\Livewire\\Crypto\\EncryptedTextInput' => __DIR__ . '/../..' . '/app/Livewire/Crypto/EncryptedTextInput.php',
+        'App\\Livewire\\Crypto\\PlainTextInput' => __DIR__ . '/../..' . '/app/Livewire/Crypto/PlainTextInput.php',
+        'App\\Livewire\\Messages\\EncryptedEmails' => __DIR__ . '/../..' . '/app/Livewire/Messages/EncryptedEmails.php',
+        'App\\Livewire\\Messages\\EncryptedMessages' => __DIR__ . '/../..' . '/app/Livewire/Messages/EncryptedMessages.php',
+        'App\\Mail\\SendEncryptedMail' => __DIR__ . '/../..' . '/app/Mail/SendEncryptedMail.php',
         'App\\Models\\ApiKey' => __DIR__ . '/../..' . '/app/Models/ApiKey.php',
         'App\\Models\\Document' => __DIR__ . '/../..' . '/app/Models/Document.php',
-        'App\\Models\\DocumentAccessPermission' => __DIR__ . '/../..' . '/app/Models/DocumentAccessPermission.php',
+        'App\\Models\\EncryptedEmail' => __DIR__ . '/../..' . '/app/Models/EncryptedEmail.php',
         'App\\Models\\Membership' => __DIR__ . '/../..' . '/app/Models/Membership.php',
         'App\\Models\\Team' => __DIR__ . '/../..' . '/app/Models/Team.php',
         'App\\Models\\TeamInvitation' => __DIR__ . '/../..' . '/app/Models/TeamInvitation.php',
         'App\\Models\\User' => __DIR__ . '/../..' . '/app/Models/User.php',
-        'App\\Models\\UserAccessPermission' => __DIR__ . '/../..' . '/app/Models/UserAccessPermission.php',
         'App\\Policies\\TeamPolicy' => __DIR__ . '/../..' . '/app/Policies/TeamPolicy.php',
         'App\\Providers\\AppServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AppServiceProvider.php',
         'App\\Providers\\AuthServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AuthServiceProvider.php',
@@ -741,6 +757,10 @@ class ComposerStaticInitece106bcd651ed4d7d7287c96ebdb4e3
         'App\\Providers\\FortifyServiceProvider' => __DIR__ . '/../..' . '/app/Providers/FortifyServiceProvider.php',
         'App\\Providers\\JetstreamServiceProvider' => __DIR__ . '/../..' . '/app/Providers/JetstreamServiceProvider.php',
         'App\\Providers\\RouteServiceProvider' => __DIR__ . '/../..' . '/app/Providers/RouteServiceProvider.php',
+        'App\\Services\\CryptoService' => __DIR__ . '/../..' . '/app/Services/CryptoService.php',
+        'App\\Services\\EmailService' => __DIR__ . '/../..' . '/app/Services/EmailService.php',
+        'App\\Services\\EncryptRequestService' => __DIR__ . '/../..' . '/app/Services/EncryptRequestService.php',
+        'App\\Services\\TokenPermissionService' => __DIR__ . '/../..' . '/app/Services/TokenPermissionService.php',
         'App\\View\\Components\\AppLayout' => __DIR__ . '/../..' . '/app/View/Components/AppLayout.php',
         'App\\View\\Components\\GuestLayout' => __DIR__ . '/../..' . '/app/View/Components/GuestLayout.php',
         'Attribute' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
@@ -6618,6 +6638,7 @@ class ComposerStaticInitece106bcd651ed4d7d7287c96ebdb4e3
         'SebastianBergmann\\Type\\UnknownType' => __DIR__ . '/..' . '/sebastian/type/src/type/UnknownType.php',
         'SebastianBergmann\\Type\\VoidType' => __DIR__ . '/..' . '/sebastian/type/src/type/VoidType.php',
         'SebastianBergmann\\Version' => __DIR__ . '/..' . '/sebastian/version/src/Version.php',
+        'Semeton\\CryptoService\\CryptoService' => __DIR__ . '/..' . '/semeton/crypto-service/src/CryptoService.php',
         'Spatie\\Backtrace\\Arguments\\ArgumentReducers' => __DIR__ . '/..' . '/spatie/backtrace/src/Arguments/ArgumentReducers.php',
         'Spatie\\Backtrace\\Arguments\\ProvidedArgument' => __DIR__ . '/..' . '/spatie/backtrace/src/Arguments/ProvidedArgument.php',
         'Spatie\\Backtrace\\Arguments\\ReduceArgumentPayloadAction' => __DIR__ . '/..' . '/spatie/backtrace/src/Arguments/ReduceArgumentPayloadAction.php',

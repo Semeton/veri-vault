@@ -24,10 +24,31 @@ class MessageEncryptorController extends Controller
         $this->user = Auth::user();
         $bearerToken = $request->bearerToken();
         if ($bearerToken && $request->user()->tokenCan('*')) {
-            $documents = $this->user->documents()->select('id', 'title', 'uuid', 'created_at', 'updated_at')->get();
+            $documents = $this->user->documents()->select('title', 'uuid', 'created_at', 'updated_at')->get();
+            return response()->json($documents);
+        } else {
             return response()->json([
-                'documents' => $documents
-            ]);
+                'error' => 'Unauthorized',
+                'message' => 'You are not allowed to perform this operation'
+            ], 403);
+        }
+        
+    }
+
+    public function show($uuid, Request $request)
+    {
+        $this->user = Auth::user();
+        $bearerToken = $request->bearerToken();
+        if ($bearerToken && $request->user()->tokenCan('read')) {
+            $document = $this->user->documents()->where('uuid', $uuid)->get();
+            
+            if(count($document) === 0){
+                return response()->json([
+                    'error' => 'notFound',
+                    'message' => 'No document found with the provided UUID for this user'
+                ], 404);
+            }
+            return response()->json($document);
         } else {
             return response()->json([
                 'error' => 'Unauthorized',
@@ -51,6 +72,20 @@ class MessageEncryptorController extends Controller
                     'errors' => ['title' => 'The title field is required'],
                 ], 400);
             }
+
+            if(gettype($request['persist']) !== 'boolean'){
+                return response()->json([
+                    'error' => 'typeError',
+                    'message' => 'Invalid persist value. It should be a boolean.'
+                ], 400);
+            }
+
+            if(!$request['persist']){
+                return response()->json([
+                    'error' => 'typeError',
+                    'message' => 'The `persist` field must be set to `true`'
+                ], 400);
+            }
             
             $data = [
                 'title' => $request['title'],
@@ -63,7 +98,6 @@ class MessageEncryptorController extends Controller
                 $encryptedContent = $this->encryptRequestService->encryptAndStoreDocument($request->user(), $data);
                 return response()->json([
                     'message' => 'Document encrypted successfully',
-                    // 'document' => $encryptedContent,
                 ]);
             } else {
                 return response()->json([

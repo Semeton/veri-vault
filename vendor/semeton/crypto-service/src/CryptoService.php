@@ -2,17 +2,43 @@
 
 declare(strict_types=1);
 
-namespace App\Services;
+namespace Semeton\CryptoService;
 
+/**
+ * Class CryptoService
+ * @author Semeton Balogun <balogunsemeton@gmail.com> 2024
+ * 
+ * This class provides methods for encryption and decryption of messages.
+ * It uses Sodium cryptographic library for encryption and decryption, ensuring high-level security.
+ *
+ * @package App\Services
+ */
 class CryptoService
 {
+    /**
+     * The key used for encryption and decryption.
+     *
+     * @var string
+     */
     private string $key;
 
+    /**
+     * CryptoService constructor.
+     *
+     * Initializes the key with a predefined string.
+     */
     public function __construct()
     {
-        $this->key = env('ENCRYPTION_KEY');
+        $this->key = 'a80070d3253ccc0c5b9b7e235ae6783a5a6474175399582fd51003bab6250139'; //Define a random string
     }
 
+    /**
+     * Encrypts a message with a secret code.
+     *
+     * @param string $message The message to encrypt.
+     * @param string $secretCode The secret code to use for encryption.
+     * @return string The encrypted message.
+     */
     public function encrypt(string $message, string $secretCode): string
     {
         $nonce = random_bytes(SODIUM_CRYPTO_SECRETBOX_NONCEBYTES);
@@ -32,6 +58,13 @@ class CryptoService
         return $cipher;
     }
 
+    /**
+     * Decrypts an encrypted message with a secret code.
+     *
+     * @param string $encrypted The encrypted message to decrypt.
+     * @param string $secretCode The secret code to use for decryption.
+     * @return string The decrypted message or an error message if decryption fails.
+     */
     public function decrypt(string $encrypted, string $secretCode): string
     {
         try {
@@ -47,11 +80,6 @@ class CryptoService
                 );
             } catch (\Exception $e) {
                 return "Error: Decryption failed: " . $e->getMessage();
-            }
-
-
-            if (!is_string($plain)) {
-                return "Error: Invalid data or secret code";
             }
 
             sodium_memzero($ciphertext);

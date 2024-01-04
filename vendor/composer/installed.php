@@ -3,7 +3,7 @@
         'name' => 'laravel/laravel',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => '1f4b98428f456b2acd3e16145252af9a0137b3cf',
+        'reference' => '38aa09623a04fcbd079789ee26f1196fb0ef11e0',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -472,7 +472,7 @@
         'laravel/laravel' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '1f4b98428f456b2acd3e16145252af9a0137b3cf',
+            'reference' => '38aa09623a04fcbd079789ee26f1196fb0ef11e0',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -1258,6 +1258,17 @@
             'install_path' => __DIR__ . '/../sebastian/version',
             'aliases' => array(),
             'dev_requirement' => true,
+        ),
+        'semeton/crypto-service' => array(
+            'pretty_version' => 'dev-master',
+            'version' => 'dev-master',
+            'reference' => 'e51687851961acda69258e73ef1409fb87147e6d',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../semeton/crypto-service',
+            'aliases' => array(
+                0 => '9999999-dev',
+            ),
+            'dev_requirement' => false,
         ),
         'spatie/backtrace' => array(
             'pretty_version' => '1.5.3',

@@ -41,10 +41,12 @@ Route::prefix('v1')->group(function () {
         
         Route::prefix('documents')->group(function () {
             Route::get('/', [MessageEncryptorController::class, 'index']);
+            Route::get('/{uuid}', [MessageEncryptorController::class, 'show']);
             Route::post('/', [MessageEncryptorController::class, 'store']);
             Route::put('/{uuid}', [MessageEncryptorController::class, 'update']);
             Route::delete('/{uuid}', [MessageEncryptorController::class, 'destroy']);
             Route::prefix('decrypt')->group( function () {
+                Route::post('/{uuid}', [MessageDecryptorController::class, 'decryptWithUuid']);
                 Route::post('/', [MessageDecryptorController::class, 'decryptMessage']);
             });
         });
