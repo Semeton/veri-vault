@@ -27,9 +27,8 @@
         </div>
 
         <p class="mt-4 text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
-            Send and managing all encrypted enail and documents. Emails are end-to-end encrypted and recipient's email
-            are not
-            stored to ensure anonymity.
+            Send and manage encrypted enail. Emails are end-to-end encrypted and recipient's email
+            are not stored in anycase as a way to ensure anonymity.
         </p>
 
         <p class="mt-4 text-sm">
@@ -60,9 +59,8 @@
         </div>
 
         <p class="mt-4 text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
-            View and managing all encrypted messages and documents. Users have the ability to set token-based
-            permissions to access
-            the encrypted documents as needed.
+            View and manage all encrypted messages and documents. You can set token-based
+            permissions to access the encrypted documents as needed.
         </p>
 
         <p class="mt-4 text-sm">
