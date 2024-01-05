@@ -49,7 +49,6 @@ class CryptoService
                 return "Error: Decryption failed: " . $e->getMessage();
             }
 
-
             if (!is_string($plain)) {
                 return "Error: Invalid data or secret code";
             }
