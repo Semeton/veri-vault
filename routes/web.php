@@ -2,10 +2,11 @@
 
 use Illuminate\Http\Request;
 use App\Models\EncryptedEmail;
+use App\Services\EmailService;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\EncryptedEmailController;
 use App\Http\Controllers\EncryptedMessagesController;
-use App\Services\EmailService;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,15 +19,7 @@ use App\Services\EmailService;
 |
 */
 
-Route::get('/', function (Request $request) {
-    $info = [
-        'ip' => $request->ip(),
-        'userAgent' => $request->header('User-Agent'),
-        'os' => $request->server('HTTP_SEC_CH_UA_PLATFORM')
-    ];
-    // return response()->json(['data' => $info]);
-    return view('home', ['data' => $info]);
-})->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/developer/docs', function () {
     return view('docs.index');

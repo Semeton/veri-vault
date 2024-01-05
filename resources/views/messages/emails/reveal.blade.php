@@ -15,7 +15,7 @@
                     </div>
                     <h2 class="mt-4 text-xl font-semibold text-gray-900 dark:text-white">Plain Text</h2>
                 </div>
-                <div class="">
+                <div class="mt-4">
                     <p class="text-white">{{ $decryptedBody }}</p>
                 </div>
             </div>
