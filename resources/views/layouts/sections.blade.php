@@ -44,8 +44,15 @@
         </div>
     </div>
     <button type="button"
-        class="mt-6 items-center px-4 py-4 !bg-indigo-700 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest !hover:bg-indigo-900 focus:bg-indigo-800 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-indigo-800 transition ease-in-out duration-150 cursor-pointer w-64"
+        class="mt-6 mr-2 items-center px-4 py-4 !bg-indigo-700 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest !hover:bg-indigo-900 focus:bg-indigo-800 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-indigo-800 transition ease-in-out duration-150 cursor-pointer w-64"
         data-te-ripple-init data-te-ripple-color="light" onclick="window.location.href='/register';">
         Get Started
     </button>
+    <button type=""
+        class="mt-6 items-center px-4 py-4 border border-indigo-700 !border-indigo-700 outline-indigo-700 rounded-md font-semibold text-xs text-indigo-700 uppercase tracking-widest hover:bg-indigo-700 focus:bg-indigo-800 focus:text-white active:text-white active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-indigo-800 transition ease-in-out duration-150 cursor-pointer w-64"
+        data-te-ripple-init data-te-ripple-color="light"
+        onclick="window.open('https://documenter.getpostman.com/view/19842116/2s9YsGhD6t', '_blank');">
+        API Documentation
+    </button>
+
 </div>
