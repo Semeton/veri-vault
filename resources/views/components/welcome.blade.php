@@ -6,7 +6,7 @@
         Welcome to your <b>VeriVault</b> dashboard!
     </h1>
 
-    <p class="mt-6 text-gray-500 dark:text-gray-400 leading-relaxed">
+    <p class="mt-6 text-gray-500 dark:text-gray-400 leading-relaxed" style="display: none">
         The SecureMessaging app is a privacy-focused application that enables users to encrypt and decrypt messages
         using a zero-knowledge-proof mechanism built on top of sodium hashing. Users can create a special secret code
         that serves as the key for encryption and decryption processes.
@@ -27,8 +27,9 @@
         </div>
 
         <p class="mt-4 text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
-            Send and managing all encrypted enail and documents. Users have the ability to set permissions and access
-            the encrypted enail and documents as needed.
+            Send and managing all encrypted enail and documents. Emails are end-to-end encrypted and recipient's email
+            are not
+            stored to ensure anonymity.
         </p>
 
         <p class="mt-4 text-sm">
@@ -59,8 +60,9 @@
         </div>
 
         <p class="mt-4 text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
-            View and managing all encrypted messages and documents. Users have the ability to set permissions and access
-            the encrypted messages and documents as needed.
+            View and managing all encrypted messages and documents. Users have the ability to set token-based
+            permissions to access
+            the encrypted documents as needed.
         </p>
 
         <p class="mt-4 text-sm">
