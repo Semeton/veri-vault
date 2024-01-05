@@ -147,7 +147,8 @@
             <p class="text-sm font-bold pb-0 mb-0">Detected IP: {{ $data['ip'] }}</p>
             @if ($data['country_name'])
                 <div class="flex mt-0 pt-0">
-                    <img src="{{ $data['country_flag_url'] }}" alt="{{ $data['country_name'] }} flag" width="10px">
+                    <img class="ms-2" src="{{ $data['country_flag_url'] }}" alt="{{ $data['country_name'] }} flag"
+                        width="15px">
                     <p>{{ $data['country_name'] }}</p>
                 </div>
             @else
