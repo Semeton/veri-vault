@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use Exception;
-// use App\Services\CryptoService;
+use App\Services\CryptoService;
 use App\Models\Document;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Semeton\CryptoService\CryptoService;
+// use Semeton\CryptoService\CryptoService;
 
 class MessageDecryptorController extends Controller
 {

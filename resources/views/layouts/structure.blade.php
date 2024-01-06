@@ -4,16 +4,23 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta property="twitter:image" content="https://i.ibb.co/6HZQP5X/Screenshot-2024-01-03-at-22-41-08.png">
-    <meta property="og:image" content="https://i.ibb.co/6HZQP5X/Screenshot-2024-01-03-at-22-41-08.png">
-    <meta property="og:title" content="{{ env('APP_NAME') }}">
-    <meta property="twitter:title" content="{{ env('APP_NAME') }}">
-    <meta property="og:description"
-        content="The SecureMessaging app is a privacy-focused application that enables users to encrypt and decrypt messages using a zero-knowledge-proof mechanism built on top of sodium hashing. Users can create a special secret code that serves as the key for encryption and decryption processes.">
-    <meta name="description"
-        content="The SecureMessaging app is a privacy-focused application that enables users to encrypt and decrypt messages using a zero-knowledge-proof mechanism built on top of sodium hashing. Users can create a special secret code that serves as the key for encryption and decryption processes.">
+    <meta property="og:title" content="{{ env('APP_NAME') }}" />
+    <meta property="twitter:title" content="{{ env('APP_NAME') }}" />
+    <meta
+        content="The SecureMessaging app is a privacy-focused application that enables users to encrypt and decrypt messages using a zero-knowledge-proof mechanism built on top of sodium hashing. Users can create a special secret code that serves as the key for encryption and decryption processes."
+        name="description" />
+    <meta
+        content="The SecureMessaging app is a privacy-focused application that enables users to encrypt and decrypt messages using a zero-knowledge-proof mechanism built on top of sodium hashing. Users can create a special secret code that serves as the key for encryption and decryption processes."
+        name="og:description" />
+    <meta
+        content="The SecureMessaging app is a privacy-focused application that enables users to encrypt and decrypt messages using a zero-knowledge-proof mechanism built on top of sodium hashing. Users can create a special secret code that serves as the key for encryption and decryption processes."
+        name="twitter:description" />
+    <meta name="og:image" content="https://i.ibb.co/6HZQP5X/Screenshot-2024-01-03-at-22-41-08.png" />
+    <meta name="twitter:image" content="https://i.ibb.co/6HZQP5X/Screenshot-2024-01-03-at-22-41-08.png" />
+    <meta name="og:url" content="htpps://verivault.xyz" />
+    <meta name="robots" content="index follow" />
     <meta name="keywords"
-        content="Message Encryption, Decryption, SecureMessaging, privacy-focused application, zero-knowledge-proof, sodium hashing, secret code">
+        content="Message Encryption, Decryption, SecureMessaging, privacy-focused application, zero-knowledge-proof, sodium hashing, secret code" />
 
     <title>{{ env('APP_NAME') }}</title>
 
