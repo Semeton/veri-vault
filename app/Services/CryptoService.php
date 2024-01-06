@@ -13,6 +13,13 @@ class CryptoService
         $this->key = env('ENCRYPTION_KEY');
     }
 
+    /**
+     * Encrypt a string
+     *
+     * @param string $message
+     * @param string $secretCode
+     * @return string
+     */
     public function encrypt(string $message, string $secretCode): string
     {
         $nonce = random_bytes(SODIUM_CRYPTO_SECRETBOX_NONCEBYTES);
@@ -32,6 +39,13 @@ class CryptoService
         return $cipher;
     }
 
+    /**
+     * Decrypt an encrypted string
+     *
+     * @param string $encrypted
+     * @param string $secretCode
+     * @return string
+     */
     public function decrypt(string $encrypted, string $secretCode): string
     {
         try {
