@@ -16,7 +16,14 @@ class EncryptRequestService {
         $this->cryptoService = $cryptoService;
     }
     
-    public function encryptAndStoreDocument(User $user, $data): Document
+    /**
+     * Encrypt and store document
+     *
+     * @param User $user
+     * @param Array $data
+     * @return Document
+     */
+    public function encryptAndStoreDocument(User $user, Array $data): Document
     {
         $encryptedContent = $this->cryptoService->encrypt($data['body'], $data['secret']);
 
@@ -31,6 +38,14 @@ class EncryptRequestService {
         return $document;
     }
 
+    /**
+     * Update encrypted document
+     *
+     * @param User $user
+     * @param Array $data
+     * @param string $uuid
+     * @return Document
+     */
     public function encryptAndUpdateDocument(User $user, Array $data, string $uuid): Document
     {
         $encryptedContent = $this->cryptoService->encrypt($data['body'], $data['secret']);
