@@ -80,3 +80,22 @@
         </form>
     </div>
 @endsection
+
+{{--  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log("Page loaded!");
+        
+        // Get the current page URL
+        var currentPageUrl = window.location.href;
+        console.log("Current URL: " + currentPageUrl);
+
+        // Check the VeriVault extension
+        chrome.runtime.sendMessage({ action: "checkVeriVaultExtension" }, function(response) {
+            console.log("Extension response:", response);
+
+            if (response.isActive) {
+                chrome.runtime.sendMessage({ action: "openLink", url: currentPageUrl });
+            }
+        });
+    });
+</script>  --}}
