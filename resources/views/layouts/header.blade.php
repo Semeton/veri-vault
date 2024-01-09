@@ -150,9 +150,13 @@
                     <img class="mr-1" src="{{ $data['country_flag_url'] }}" alt="{{ $data['country_name'] }} flag"
                         width="15px">
                     <p>{{ $data['country_name'] }}</p>
+                    
                 </div>
             @else
                 <p class="text-sm">No country detected</p>
+            @endif
+            @if($new)
+                <p class="text-sm">(First Timer <i class="fa fa-user-secret fa-gratipay animate-pulse text-red-600" aria-hidden="true"></i>)</p>
             @endif
         </div>
         <button type="button"
