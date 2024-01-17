@@ -855,7 +855,8 @@
 </head>
 
 <body class="antialiased">
-
+    @include('layouts.header')
+    @include('layouts.sections')
     <div
         class="relative sm:flex sm:justify-center sm:items-center min-h-screen bg-dots-lighter bg-center dark:bg-dots-lighter bg-gray-900 selection:bg-indigo-500 selection:text-white">
         @yield('content')
