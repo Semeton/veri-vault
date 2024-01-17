@@ -15,8 +15,9 @@
     <meta
         content="The SecureMessaging app is a privacy-focused application that enables users to encrypt and decrypt messages using a zero-knowledge-proof mechanism built on top of sodium hashing. Users can create a special secret code that serves as the key for encryption and decryption processes."
         name="twitter:description" />
-    <meta name="og:image" content="https://i.ibb.co/6HZQP5X/Screenshot-2024-01-03-at-22-41-08.png" />
-    <meta name="twitter:image" content="https://i.ibb.co/6HZQP5X/Screenshot-2024-01-03-at-22-41-08.png" />
+    <meta name="image" content="{{ asset('preview.png') }}" />
+    <meta name="og:image" content="{{ asset('preview.png') }}" />
+    <meta name="twitter:image" content="{{ asset('preview.png') }}" />
     <meta name="og:url" content="htpps://verivault.xyz" />
     <meta name="robots" content="index follow" />
     <meta name="keywords"
@@ -855,7 +856,8 @@
 </head>
 
 <body class="antialiased">
-
+    @include('layouts.header')
+    @include('layouts.sections')
     <div
         class="relative sm:flex sm:justify-center sm:items-center min-h-screen bg-dots-lighter bg-center dark:bg-dots-lighter bg-gray-900 selection:bg-indigo-500 selection:text-white">
         @yield('content')
