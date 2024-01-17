@@ -15,6 +15,7 @@
     <meta
         content="The SecureMessaging app is a privacy-focused application that enables users to encrypt and decrypt messages using a zero-knowledge-proof mechanism built on top of sodium hashing. Users can create a special secret code that serves as the key for encryption and decryption processes."
         name="twitter:description" />
+    <meta name="image" content="{{ asset('preview.png') }}" />
     <meta name="og:image" content="{{ asset('preview.png') }}" />
     <meta name="twitter:image" content="{{ asset('preview.png') }}" />
     <meta name="og:url" content="htpps://verivault.xyz" />
