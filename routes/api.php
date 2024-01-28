@@ -1,13 +1,12 @@
 <?php
 
+use App\Http\Controllers\Api\Chat\ChatRequestController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Middleware\AuthenticateApiKey;
 use App\Http\Controllers\Api\UserAuthController;
 use App\Http\Controllers\Api\MessageDecryptorController;
 use App\Http\Controllers\Api\MessageEncryptorController;
 use App\Http\Controllers\Api\PersonalAccessTokenController;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -48,6 +47,17 @@ Route::prefix('v1')->group(function () {
             Route::prefix('decrypt')->group( function () {
                 Route::post('/{uuid}', [MessageDecryptorController::class, 'decryptWithUuid']);
                 Route::post('/', [MessageDecryptorController::class, 'decryptMessage']);
+            });
+        });
+
+        Route::prefix('chats')->group(function () {
+            Route::prefix('requests')->group(function () {
+                Route::get('/', [ChatRequestController::class, 'index']);
+                Route::post('/', [ChatRequestController::class, 'create']);
+                Route::get('/accept/{uuid}', [ChatRequestController::class, 'acceptRequest']);
+                Route::get('/reject/{uuid}', [ChatRequestController::class, 'rejectRequest']);
+                Route::get('/block/{uuid}', [ChatRequestController::class, 'blockUserRequest']);
+                Route::delete('/{uuid}', [ChatRequestController::class, 'delete']);
             });
         });
     });

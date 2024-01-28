@@ -12,7 +12,7 @@ use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Jetstream\HasTeams;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable
 {
     // implements MustVerifyEmail
     use HasApiTokens;
@@ -41,6 +41,9 @@ class User extends Authenticatable implements MustVerifyEmail
         'remember_token',
         'two_factor_recovery_codes',
         'two_factor_secret',
+        'two_factor_confirmed_at',
+        'current_team_id',
+        'email_verified_at'
     ];
 
     /**
@@ -74,5 +77,15 @@ class User extends Authenticatable implements MustVerifyEmail
     public function encryptedEmails(): HasMany
     {
         return $this->hasMany(EncryptedEmail::class);
+    }
+
+    public function sentChatRequests(): HasMany
+    {
+        return $this->hasMany(ChatRequest::class, 'sender_email', 'email');
+    }
+
+    public function receivedChatRequests(): HasMany
+    {
+        return $this->hasMany(ChatRequest::class, 'recipient_email', 'email');
     }
 }

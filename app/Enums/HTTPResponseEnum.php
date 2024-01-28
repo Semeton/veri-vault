@@ -29,6 +29,13 @@ class HTTPResponseEnum {
         ];
     }
 
+    public static function getBadRequestMessage(){
+        return [
+            'error' => 'BadRequest',
+            'message' => 'There was an error processing the request'
+        ];
+    }
+
     public static function getNotFoundMessage(string $request, string $uuid){
         return [
             'error' => 'NotFound',
