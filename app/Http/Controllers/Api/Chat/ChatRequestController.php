@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Enums\HTTPResponseEnum;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
+use App\Models\Chat;
 use App\Services\ChatRequestService;
 use Illuminate\Support\Facades\Auth;
 
@@ -65,12 +66,25 @@ class ChatRequestController extends Controller
                 ], HTTPResponseEnum::FORBIDDEN);
             }
 
+            if(Chat::where('sender_id', $this->user->id)->where('recipient_id', User::where('email', $data['recipient_email'])->first()->id)->count() > 0){
+                return response()->json([
+                    'error' => 'Invalid',
+                    'message' => 'An active chat is already established between you and this user'
+                ], HTTPResponseEnum::BAD_REQUEST);
+            }
+
             $requestExists = $this->user->sentChatRequests->where('recipient_email', $data['recipient_email']);
             if($requestExists->count() > 0){
                 if($requestExists->value('status') === 1){
                     return response()->json([
                         'error' => 'Invalid',
-                        'message' => 'Chat already established between you and this user'
+                        'message' => 'An active chat is already established between you and this user'
+                    ], HTTPResponseEnum::BAD_REQUEST);
+                }
+                if($requestExists->value('status') === 3){
+                    return response()->json([
+                        'error' => 'Invalid',
+                        'message' => 'The recipient has blocked you from sending request'
                     ], HTTPResponseEnum::BAD_REQUEST);
                 }
                 return response()->json([
@@ -99,6 +113,12 @@ class ChatRequestController extends Controller
         try{
             $chatRequest = ChatRequest::whereUuid($uuid)->firstOrFail();
             if($chatRequest){
+                if($chatRequest->sender_email === Auth::user()->email){
+                    return response()->json([
+                        'error' => 'Forbidden',
+                        'message' => 'You cannot accept a chat request sent out by you'
+                    ], HTTPResponseEnum::FORBIDDEN);
+                }
                 if($this->chatRequestService->createChat($chatRequest)){
                     $chatRequest->update([ 'status' => 1 ]);
                     return response()->json([
@@ -135,7 +155,26 @@ class ChatRequestController extends Controller
         }
     }
 
-    public function deleteRequest(string $uuid)
+    public function blockUserRequest(string $uuid)
+    {
+        try{
+            $chatRequest = ChatRequest::findOrFail($uuid);
+            
+            if($chatRequest->update([ 'status' => 3 ])){
+                return response()->json(['message' =>'Request rejected'], HTTPResponseEnum::OK);
+            } else {
+                return response()->json(HTTPResponseEnum::getBadRequestMessage(), HTTPResponseEnum::BAD_REQUEST);
+            }
+
+        } catch (Exception $e){
+            return response()->json([
+                'error' => 'Exception',
+                'message' => $e->getMessage(),
+            ]);
+        }
+    }
+
+    public function delete(string $uuid)
     {
         try{
             $chatRequest = ChatRequest::findOrFail($uuid);

@@ -14,8 +14,8 @@ class ChatRequestService {
     {
         // $senderId = User::where('email', $chatRequest->sender_email)->value('id');
         // $recipientId = User::where('email', $chatRequest->recipient_email)->value('id');
-        $senderId = $chatRequest->sender_id;
-        $recipientId = $chatRequest->recipient_id;
+        $senderId = $chatRequest->sender()->value('id');
+        $recipientId = $chatRequest->recipient()->value('id');
         $chatKey = $this->generateChatKey($chatRequest->sender_email, $chatRequest->recipient_email);
 
         return Chat::create([
