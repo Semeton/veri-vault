@@ -28,13 +28,11 @@ class ChatRequestController extends Controller
             
             $sentChatRequests = $this->user->sentChatRequests;
             foreach($sentChatRequests as $item){
-                // $item->sender_email = $item->sender()->get();
                 $item->recipient_email = $item->recipient()->get();
             }
             $receivedChatRequests = $this->user->receivedChatRequests;
             foreach($receivedChatRequests as $item){
                 $item->sender_email = $item->sender()->get();
-                // $item->recipient_email = $item->recipient()->get();
             }
 
             return response()->json([
@@ -177,7 +175,7 @@ class ChatRequestController extends Controller
     public function delete(string $uuid)
     {
         try{
-            $chatRequest = ChatRequest::findOrFail($uuid);
+            $chatRequest = ChatRequest::where('uuid', $uuid)->firstOrFail();
             $chatRequest->delete();
             return response()->json(['message'=>"Chat request deleted"]);
         } catch (Exception $e){

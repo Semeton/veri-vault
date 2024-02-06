@@ -1,9 +1,10 @@
 <?php
 
-use App\Http\Controllers\Api\Chat\ChatRequestController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserAuthController;
+use App\Http\Controllers\Api\Chat\ChatController;
+use App\Http\Controllers\Api\Chat\ChatRequestController;
 use App\Http\Controllers\Api\MessageDecryptorController;
 use App\Http\Controllers\Api\MessageEncryptorController;
 use App\Http\Controllers\Api\PersonalAccessTokenController;
@@ -51,6 +52,8 @@ Route::prefix('v1')->group(function () {
         });
 
         Route::prefix('chats')->group(function () {
+            Route::get('/', [ChatController::class, 'index']);
+            Route::get('/{uuid}', [ChatController::class, 'show']);
             Route::prefix('requests')->group(function () {
                 Route::get('/', [ChatRequestController::class, 'index']);
                 Route::post('/', [ChatRequestController::class, 'create']);

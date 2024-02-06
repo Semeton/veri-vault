@@ -88,4 +88,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(ChatRequest::class, 'recipient_email', 'email');
     }
+
+    public function chats(): HasMany
+    {
+        return $this->hasMany(Chat::class, 'sender_id')
+                    ->orWhere('recipient_id', $this->id);
+    }
 }
