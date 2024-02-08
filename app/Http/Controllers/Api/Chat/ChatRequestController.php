@@ -62,7 +62,7 @@ class ChatRequestController extends Controller
     public function create(Request $request): JsonResponse
     {
         return $this->requestHandler->handleException(function () use ($request) {
-            $data = $this->chatRequestService->validateRequest($request, [
+            $data = $this->requestHandler->validateRequest($request, [
                 'recipient_email' => 'required|email|exists:users,email',
             ]);
 
@@ -86,7 +86,7 @@ class ChatRequestController extends Controller
     public function acceptRequest(string $uuid): JsonResponse
     {
         return $this->requestHandler->handleException(function () use ($uuid) {
-            $chatRequest = ChatRequest::whereUuid($uuid)->firstOrFail();
+            $chatRequest = $this->chatRequestService->validateUuid($uuid);
             $this->chatRequestService->validateAndProcessChatRequest($chatRequest);
 
             $chatRequest->update(['status' => 1]);
@@ -103,7 +103,7 @@ class ChatRequestController extends Controller
     public function rejectRequest(string $uuid): JsonResponse
     {
         return $this->handleException(function () use ($uuid) {
-            $chatRequest = ChatRequest::findOrFail($uuid);
+            $chatRequest = $this->chatRequestService->validateUuid($uuid);
             $chatRequest->update(['status' => 2]);
             return response()->json(['message' => 'Request rejected'], HTTPResponseEnum::OK);
         });

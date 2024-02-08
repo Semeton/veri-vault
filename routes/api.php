@@ -54,6 +54,7 @@ Route::prefix('v1')->group(function () {
         Route::prefix('chats')->group(function () {
             Route::get('/', [ChatController::class, 'index']);
             Route::get('/show/{uuid}', [ChatController::class, 'show']);
+            Route::put('/{uuid}', [ChatController::class, 'setChatSecret']);
             Route::prefix('requests')->group(function () {
                 Route::get('/', [ChatRequestController::class, 'index']);
                 Route::post('/', [ChatRequestController::class, 'create']);

@@ -7,7 +7,6 @@ use App\Models\Chat;
 use App\Models\User;
 use App\Models\ChatRequest;
 use Illuminate\Support\Str;
-use Illuminate\Http\Request;
 use App\Enums\HTTPResponseEnum;
 use Illuminate\Support\Facades\Auth;
 
@@ -15,8 +14,6 @@ class ChatRequestService {
 
     public function createChat(ChatRequest $chatRequest)
     {
-        // $senderId = User::where('email', $chatRequest->sender_email)->value('id');
-        // $recipientId = User::where('email', $chatRequest->recipient_email)->value('id');
         $senderId = $chatRequest->sender()->value('id');
         $recipientId = $chatRequest->recipient()->value('id');
         $chatKey = $this->generateChatKey($chatRequest->sender_email, $chatRequest->recipient_email);
@@ -36,15 +33,19 @@ class ChatRequestService {
     }
 
     /**
-     * Validates the incoming request against the provided rules.
-     * 
-     * @param Request $request Incoming request to validate.
-     * @param array $rules Validation rules.
-     * @return array Validated data.
+     * Handles exceptions thrown during chat operations.
+     *
+     * @param Throwable $th The thrown exception.
+     * @param string|null $uuid Optional UUID of the chat for not found exceptions.
+     * @return ChatRequest $chat with the requested uuid
      */
-    public function validateRequest(Request $request, array $rules): array
+    public function validateUuid(string $uuid): ChatRequest
     {
-        return $request->validate($rules);
+        $chatRequest = ChatRequest::whereUuid($uuid)->first();
+        if (!$chatRequest) {
+            abort(HTTPResponseEnum::NOT_FOUND, 'Chat does not exist');
+        }
+        return $chatRequest;
     }
 
     /**
