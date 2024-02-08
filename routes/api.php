@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserAuthController;
 use App\Http\Controllers\Api\Chat\ChatController;
+use App\Http\Controllers\Api\Chat\ChatMessageController;
 use App\Http\Controllers\Api\Chat\ChatRequestController;
 use App\Http\Controllers\Api\MessageDecryptorController;
 use App\Http\Controllers\Api\MessageEncryptorController;
@@ -54,7 +55,7 @@ Route::prefix('v1')->group(function () {
         Route::prefix('chats')->group(function () {
             Route::get('/', [ChatController::class, 'index']);
             Route::get('/show/{uuid}', [ChatController::class, 'show']);
-            Route::put('/{uuid}', [ChatController::class, 'setChatSecret']);
+            Route::put('/secret/{uuid}', [ChatController::class, 'setChatSecret']);
             Route::prefix('requests')->group(function () {
                 Route::get('/', [ChatRequestController::class, 'index']);
                 Route::post('/', [ChatRequestController::class, 'create']);
@@ -62,6 +63,10 @@ Route::prefix('v1')->group(function () {
                 Route::post('/reject/{uuid}', [ChatRequestController::class, 'rejectRequest']);
                 Route::post('/block/{uuid}', [ChatRequestController::class, 'blockUserRequest']);
                 Route::delete('/{uuid}', [ChatRequestController::class, 'delete']);
+            });
+            Route::prefix('/messages')->group(function () {
+                Route::get('/{uuid}', [ChatMessageController::class, 'index']);
+                Route::post('/{uuid}', [ChatMessageController::class, 'create']);
             });
         });
     });
