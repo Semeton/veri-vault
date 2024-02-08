@@ -3,14 +3,15 @@
 namespace App\Http\Controllers\Api\Chat;
 
 use Throwable;
+use App\Models\Chat;
 use App\Models\User;
 use App\Lib\RequestHandler;
+use Illuminate\Http\Request;
 use App\Enums\HTTPResponseEnum;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
-use App\Models\Chat;
+use App\Services\ChatService;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 /**
  * Handles chat-related operations for the API.
@@ -23,10 +24,12 @@ class ChatController extends Controller
     private User $authenticatedUser;
 
     /**
-     * ChatController constructor.
-     * Sets up middleware to authenticate user before any chat action.
+     * ChatRequestController constructor.
+     * 
+     * @param User $user Injected User model to interact with user data.
+     * @param ChatService $chatService Injected service to handle business logic related to chat requests.
      */
-    public function __construct(public RequestHandler $requestHandler)
+    public function __construct(public RequestHandler $requestHandler, public ChatService $chatService)
     {
         $this->middleware(function ($request, $next) {
             $this->authenticatedUser = Auth::user();
@@ -56,25 +59,21 @@ class ChatController extends Controller
     public function show(string $uuid): JsonResponse
     {
         return $this->requestHandler->handleException(function () use ($uuid) {
-            $chat = $this->validateUuid($uuid);
+            $chat = $this->chatService->validateUuid($this->authenticatedUser, $uuid);
             $chat->role = $chat->sender_id === $this->authenticatedUser->id ? 'sender' : 'recipient';
             return response()->json($chat, JsonResponse::HTTP_OK);
         });
     }
 
-    /**
-     * Handles exceptions thrown during chat operations.
-     *
-     * @param Throwable $th The thrown exception.
-     * @param string|null $uuid Optional UUID of the chat for not found exceptions.
-     * @return Chat $chat with the requested uuid
-     */
-    private function validateUuid(string $uuid): Chat
+    public function setChatSecret(string $uuid, Request $request)
     {
-        $chat = $this->authenticatedUser->chats()->where('uuid', $uuid)->first();
-        if (!$chat) {
-            abort(HTTPResponseEnum::NOT_FOUND, 'Chat does not exist');
-        }
-        return $chat;
+        return $this->requestHandler->handleException(function () use ($uuid, $request) {
+            $this->requestHandler->validateRequest($request, [
+                'chat_secret' => 'required|string|min:6',
+            ]);
+            $chat = $this->chatService->validateUuid($this->authenticatedUser, $uuid);
+            $this->chatService->setUserChatSecret($this->authenticatedUser, $chat, $request->chat_secret);
+            return response()->json($chat, JsonResponse::HTTP_CREATED);
+        });
     }
 }
