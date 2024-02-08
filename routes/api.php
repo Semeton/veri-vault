@@ -53,13 +53,14 @@ Route::prefix('v1')->group(function () {
 
         Route::prefix('chats')->group(function () {
             Route::get('/', [ChatController::class, 'index']);
-            Route::get('/{uuid}', [ChatController::class, 'show']);
+            Route::get('/show/{uuid}', [ChatController::class, 'show']);
+            Route::put('/{uuid}', [ChatController::class, 'setChatSecret']);
             Route::prefix('requests')->group(function () {
                 Route::get('/', [ChatRequestController::class, 'index']);
                 Route::post('/', [ChatRequestController::class, 'create']);
-                Route::get('/accept/{uuid}', [ChatRequestController::class, 'acceptRequest']);
-                Route::get('/reject/{uuid}', [ChatRequestController::class, 'rejectRequest']);
-                Route::get('/block/{uuid}', [ChatRequestController::class, 'blockUserRequest']);
+                Route::post('/accept/{uuid}', [ChatRequestController::class, 'acceptRequest']);
+                Route::post('/reject/{uuid}', [ChatRequestController::class, 'rejectRequest']);
+                Route::post('/block/{uuid}', [ChatRequestController::class, 'blockUserRequest']);
                 Route::delete('/{uuid}', [ChatRequestController::class, 'delete']);
             });
         });

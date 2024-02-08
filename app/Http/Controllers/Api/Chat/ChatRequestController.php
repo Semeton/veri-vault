@@ -3,186 +3,124 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Api\Chat;
 
 use Exception;
+use App\Models\Chat;
 use App\Models\User;
+use App\Lib\RequestHandler;
 use App\Models\ChatRequest;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Enums\HTTPResponseEnum;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
-use App\Models\Chat;
 use App\Services\ChatRequestService;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * Handles chat request operations such as listing, creating, accepting, rejecting, blocking, and deleting chat requests.
+ */
 class ChatRequestController extends Controller
 {
-    public function __construct(public User $user, public ChatRequestService $chatRequestService)
+    /**
+     * ChatRequestController constructor.
+     * 
+     * @param User $user Injected User model to interact with user data.
+     * @param ChatRequestService $chatRequestService Injected service to handle business logic related to chat requests.
+     */
+    public function __construct(private User $user, private ChatRequestService $chatRequestService, public RequestHandler $requestHandler)
     {
-
     }
 
-    public function index()
+    /**
+     * Lists all sent and received chat requests for the authenticated user.
+     * 
+     * @return JsonResponse List of chat requests.
+     */
+    public function index(): JsonResponse
     {
-        try{
+        return $this->requestHandler->handleException(function () {
             $this->user = Auth::user();
-            
-            $sentChatRequests = $this->user->sentChatRequests;
-            foreach($sentChatRequests as $item){
+            $sentChatRequests = $this->user->sentChatRequests->each(function ($item) {
                 $item->recipient_email = $item->recipient()->get();
-            }
-            $receivedChatRequests = $this->user->receivedChatRequests;
-            foreach($receivedChatRequests as $item){
+            });
+            $receivedChatRequests = $this->user->receivedChatRequests->each(function ($item) {
                 $item->sender_email = $item->sender()->get();
-            }
+            });
 
             return response()->json([
                 'sent' => $sentChatRequests,
                 'received' => $receivedChatRequests,
             ], HTTPResponseEnum::OK);
-        } catch (Exception $e){
-            return response()->json([
-                'error' => 'Exception',
-                'message' => $e->getMessage(),
-            ]);
-        }
+        });
     }
 
+    /**
+     * Creates a new chat request with the provided recipient email.
+     * 
+     * @param Request $request Incoming request containing 'recipient_email'.
+     * @return JsonResponse Newly created chat request data.
+     */
     public function create(Request $request): JsonResponse
     {
-        try{
-            $data = $request->validate([
+        return $this->requestHandler->handleException(function () use ($request) {
+            $data = $this->requestHandler->validateRequest($request, [
                 'recipient_email' => 'required|email|exists:users,email',
             ]);
 
             $this->user = Auth::user();
-            $data['uuid'] = Str::uuid();
+            $data['uuid'] = Str::uuid()->toString();
 
-            if($this->user->email === $data['recipient_email']){
-                return response()->json([
-                    'error' => 'Forbidden',
-                    'message' => 'You cannot send a chat request to yourself'
-                ], HTTPResponseEnum::FORBIDDEN);
-            }
-
-            if(Chat::where('sender_id', $this->user->id)->where('recipient_id', User::where('email', $data['recipient_email'])->first()->id)->count() > 0){
-                return response()->json([
-                    'error' => 'Invalid',
-                    'message' => 'An active chat is already established between you and this user'
-                ], HTTPResponseEnum::BAD_REQUEST);
-            }
-
-            $requestExists = $this->user->sentChatRequests->where('recipient_email', $data['recipient_email']);
-            if($requestExists->count() > 0){
-                if($requestExists->value('status') === 1){
-                    return response()->json([
-                        'error' => 'Invalid',
-                        'message' => 'An active chat is already established between you and this user'
-                    ], HTTPResponseEnum::BAD_REQUEST);
-                }
-                if($requestExists->value('status') === 3){
-                    return response()->json([
-                        'error' => 'Invalid',
-                        'message' => 'The recipient has blocked you from sending request'
-                    ], HTTPResponseEnum::BAD_REQUEST);
-                }
-                return response()->json([
-                    'error' => 'DuplicationError',
-                    'message' => 'You have already sent a request to this user'
-                ], HTTPResponseEnum::BAD_REQUEST);
-            }
+            $this->chatRequestService->validateChatRequest($this->user, $data);
 
             $createRequest = $this->user->sentChatRequests()->create($data);
 
-            if(!$createRequest){
-                return response()->json([HTTPResponseEnum::getBadRequestMessage()], HTTPResponseEnum::BAD_REQUEST);
-            }
-
             return response()->json($createRequest, HTTPResponseEnum::CREATED);
-        } catch (Exception $e){
-            return response()->json([
-                'error' => 'Exception',
-                'message' => $e->getMessage(),
-            ]);
-        }
+        });
     }
 
-    public function acceptRequest(string $uuid)
+    /**
+     * Accepts a chat request identified by UUID.
+     * 
+     * @param string $uuid UUID of the chat request to accept.
+     * @return JsonResponse Confirmation message.
+     */
+    public function acceptRequest(string $uuid): JsonResponse
     {
-        try{
-            $chatRequest = ChatRequest::whereUuid($uuid)->firstOrFail();
-            if($chatRequest){
-                if($chatRequest->sender_email === Auth::user()->email){
-                    return response()->json([
-                        'error' => 'Forbidden',
-                        'message' => 'You cannot accept a chat request sent out by you'
-                    ], HTTPResponseEnum::FORBIDDEN);
-                }
-                if($this->chatRequestService->createChat($chatRequest)){
-                    $chatRequest->update([ 'status' => 1 ]);
-                    return response()->json([
-                        'message' => 'Request accepted and chat created successfully'
-                    ], HTTPResponseEnum::CREATED);
-                }else{
-                    return response()->json(HTTPResponseEnum::getBadRequestMessage(), HTTPResponseEnum::BAD_REQUEST);
-                }
-            }
-        } catch (Exception $e){
-            return response()->json([
-                'error' => 'Exception',
-                'message' => $e->getMessage(),
-            ]);
-        }
+        return $this->requestHandler->handleException(function () use ($uuid) {
+            $chatRequest = $this->chatRequestService->validateUuid($uuid);
+            $this->chatRequestService->validateAndProcessChatRequest($chatRequest);
+
+            $chatRequest->update(['status' => 1]);
+            return response()->json(['message' => 'Request accepted and chat created successfully'], HTTPResponseEnum::CREATED);
+        });
     }
 
-    public function rejectRequest(string $uuid)
+    /**
+     * Rejects a chat request identified by UUID.
+     * 
+     * @param string $uuid UUID of the chat request to reject.
+     * @return JsonResponse Confirmation message.
+     */
+    public function rejectRequest(string $uuid): JsonResponse
     {
-        try{
+        return $this->handleException(function () use ($uuid) {
+            $chatRequest = $this->chatRequestService->validateUuid($uuid);
+            $chatRequest->update(['status' => 2]);
+            return response()->json(['message' => 'Request rejected'], HTTPResponseEnum::OK);
+        });
+    }
+
+    /**
+     * Blocks the user who sent a chat request identified by UUID.
+     * 
+     * @param string $uuid UUID of the chat request for blocking the user.
+     * @return JsonResponse Confirmation message.
+     */
+    public function blockUserRequest(string $uuid): JsonResponse
+    {
+        return $this->handleException(function () use ($uuid) {
             $chatRequest = ChatRequest::findOrFail($uuid);
-            
-            if($chatRequest->update([ 'status' => 2 ])){
-                return response()->json(['message' =>'Request rejected'], HTTPResponseEnum::OK);
-            } else {
-                return response()->json(HTTPResponseEnum::getBadRequestMessage(), HTTPResponseEnum::BAD_REQUEST);
-            }
-
-        } catch (Exception $e){
-            return response()->json([
-                'error' => 'Exception',
-                'message' => $e->getMessage(),
-            ]);
-        }
-    }
-
-    public function blockUserRequest(string $uuid)
-    {
-        try{
-            $chatRequest = ChatRequest::findOrFail($uuid);
-            
-            if($chatRequest->update([ 'status' => 3 ])){
-                return response()->json(['message' =>'Request rejected'], HTTPResponseEnum::OK);
-            } else {
-                return response()->json(HTTPResponseEnum::getBadRequestMessage(), HTTPResponseEnum::BAD_REQUEST);
-            }
-
-        } catch (Exception $e){
-            return response()->json([
-                'error' => 'Exception',
-                'message' => $e->getMessage(),
-            ]);
-        }
-    }
-
-    public function delete(string $uuid)
-    {
-        try{
-            $chatRequest = ChatRequest::where('uuid', $uuid)->firstOrFail();
-            $chatRequest->delete();
-            return response()->json(['message'=>"Chat request deleted"]);
-        } catch (Exception $e){
-            return response()->json([
-                'error' => 'Exception',
-                'message' => $e->getMessage(),
-            ]);
-        }
+            $chatRequest->update(['status' => 3]);
+            return response()->json(['message' => 'User blocked successfully'], HTTPResponseEnum::OK);
+        });
     }
 }
