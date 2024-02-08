@@ -22,28 +22,39 @@ class HTTPResponseEnum {
         ];
     }
 
-    public static function getUnathorizedMessage(){
+    public static function getUnathorizedMessage()
+    {
         return [
             'error' => 'Forbidden',
             'message' => 'You are not allowed to perform this operation'
         ];
     }
 
-    public static function getBadRequestMessage(){
+    public static function getBadRequestMessage()
+    {
         return [
             'error' => 'BadRequest',
             'message' => 'There was an error processing the request'
         ];
     }
 
-    public static function getNotFoundMessage(string $request, string $uuid){
+    public static function getNotFoundMessage(string $request, string $uuid)
+    {
         return [
             'error' => 'NotFound',
-            'message' => 'Document does not exist',
+            'message' => 'Requested resource does not exist',
             'details' => [
                 'request' => $request,
                 'uuid' => $uuid
             ]
         ];
+    }
+
+    public static function getExceptionMessage(string $message)
+    {
+        return [
+                'error' => 'Exception',
+                'message' => $message,
+            ];
     }
 }
