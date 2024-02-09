@@ -19,7 +19,7 @@ class Document extends Model
 
     protected $hidden = [
         'id',
-        'user_id'
+        // 'user_id'
     ];
 
     public function user(): BelongsTo
