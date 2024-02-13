@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Enums\HTTPResponseEnum;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -44,6 +45,11 @@ class UserAuthController extends Controller
             ], 401);
         }
 
+    }
+
+    public function me()
+    {
+        return response()->json(Auth::user(), HTTPResponseEnum::OK);
     }
 
 }
