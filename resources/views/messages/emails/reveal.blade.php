@@ -1,5 +1,7 @@
 @extends('layouts.structure')
 @section('content')
+<div
+    class="relative sm:flex sm:justify-center sm:items-center min-h-screen bg-dots-lighter bg-center dark:bg-dots-lighter bg-gray-900 selection:bg-indigo-500 selection:text-white">
     <div class="m-10">
         <div
             class="scale-100 p-6 bg-gray-800/50 bg-gradient-to-bl via-transparent ring-inset ring-white/5 rounded-lg shadow-none flex motion-safe:hover:scale-[1.01] transition-all duration-250 focus:outline focus:outline-2 focus:outline-red-500">
@@ -21,4 +23,5 @@
         </div>
 
     </div>
+</div>
 @endsection

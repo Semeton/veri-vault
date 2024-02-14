@@ -1,5 +1,7 @@
 @extends('layouts.structure')
 @section('content')
+<div
+    class="relative sm:flex sm:justify-center sm:items-center min-h-screen bg-dots-lighter bg-center dark:bg-dots-lighter bg-gray-900 selection:bg-indigo-500 selection:text-white">
     <div>
         @if (!empty(session()->get('success')))
             <div id="toast-success"
@@ -79,6 +81,7 @@
             </div>
         </form>
     </div>
+</div>
 @endsection
 
 {{--  <script>

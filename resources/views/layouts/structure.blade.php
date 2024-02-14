@@ -856,13 +856,7 @@
 </head>
 
 <body class="antialiased">
-    @include('layouts.header')
-    @include('layouts.sections')
-    <div
-        class="relative sm:flex sm:justify-center sm:items-center min-h-screen bg-dots-lighter bg-center dark:bg-dots-lighter bg-gray-900 selection:bg-indigo-500 selection:text-white">
-        @yield('content')
-
-    </div>
+    @yield('content')
     @livewireScripts
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.2.0/flowbite.min.js"></script>
     <script src="https://kit.fontawesome.com/5c882a0afd.js" crossorigin="anonymous"></script>
