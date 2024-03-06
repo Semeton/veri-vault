@@ -1,9 +1,9 @@
 @extends('layouts.structure')
 @section('content')
 @include('layouts.header')
-    @include('layouts.sections')
-    <div
-        class="relative sm:flex sm:justify-center sm:items-center min-h-screen bg-dots-lighter bg-center dark:bg-dots-lighter bg-gray-900 selection:bg-indigo-500 selection:text-white">
+@include('layouts.sections')
+<div
+    class="relative sm:flex sm:justify-center sm:items-center min-h-screen bg-dots-lighter bg-center dark:bg-dots-lighter bg-gray-900 selection:bg-indigo-500 selection:text-white">
     <div class="max-w-7xl mx-auto p-6 lg:p-8" id="encryptDecryptSection">
         <div class="mt-16">
             <h1 class="mt-0 mb-12 text-4xl font-bold tracking-tight md:text-5xl xl:text-6xl text-center text-indigo-300">
