@@ -14,7 +14,7 @@ return new class extends Migration {
             Blueprint $table
         ) {
             $table->id();
-            $table->foreign("user_id");
+            $table->foreignId("user_id");
             $table->bigInteger("token");
             $table->boolean("status")->default(1);
             $table->timestamps();

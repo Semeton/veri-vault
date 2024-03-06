@@ -2,24 +2,23 @@
 
 namespace App\Mail;
 
-use App\Models\User;
 use Illuminate\Bus\Queueable;
-use Illuminate\Mail\Mailable;
-use Illuminate\Mail\Mailables\Address;
-use Illuminate\Mail\Mailables\Content;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Content;
+use Illuminate\Mail\Mailables\Envelope;
+use Illuminate\Queue\SerializesModels;
 
-class SendEncryptedMail extends Mailable
+class EmailVerification extends Mailable
 {
     use Queueable, SerializesModels;
 
     /**
      * Create a new message instance.
      */
-    public function __construct(public User $user, protected array $mailData)
+    public function __construct(protected array $mailData)
     {
+        //
     }
 
     /**
@@ -27,10 +26,7 @@ class SendEncryptedMail extends Mailable
      */
     public function envelope(): Envelope
     {
-        return new Envelope(
-            from: new Address($this->user->email, $this->user->name),
-            subject: $this->mailData["subject"]
-        );
+        return new Envelope(subject: "Verify Your VeriVault Email");
     }
 
     /**
@@ -39,12 +35,8 @@ class SendEncryptedMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            markdown: "emails.send-encrypted-mail",
-            with: [
-                "url" => route("viewEncryptedEmail", [
-                    "uuid" => $this->mailData["uuid"],
-                ]),
-            ]
+            markdown: "emails.email-verification-mail",
+            with: ["data" => $this->mailData]
         );
     }
 
