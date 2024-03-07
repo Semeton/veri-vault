@@ -20,54 +20,92 @@ use App\Http\Controllers\Api\PersonalAccessTokenController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+Route::middleware("auth:sanctum")->get("/user", function (Request $request) {
     return $request->user();
 });
 
-Route::prefix('v1')->group(function () {
-    Route::get('/', function(){
+Route::prefix("v1")->group(function () {
+    Route::get("/", function () {
         return response()->json([
-            'message' => 'Api server running'
+            "message" => "Api server running",
         ]);
     });
-    Route::prefix('users')->group(function () {
-        Route::post('/register', [UserAuthController::class, 'register']);
-        Route::post('/login', [UserAuthController::class, 'login']);
-        Route::middleware('auth:sanctum')->get('/me', [UserAuthController::class, 'me']);
+    Route::prefix("users")->group(function () {
+        Route::post("/register", [UserAuthController::class, "register"]);
+        Route::get("/verify/token/{email}", [
+            UserAuthController::class,
+            "sendVerificationToken",
+        ]);
+        Route::get("/verify/{token}", [UserAuthController::class, "verify"]);
+        Route::post("/login", [UserAuthController::class, "login"]);
+        Route::middleware("auth:sanctum")->get("/me", [
+            UserAuthController::class,
+            "me",
+        ]);
     });
-    Route::middleware(['auth:sanctum'])->group(function(){
-        Route::prefix('tokens')->group(function () {
-            Route::get('/', [PersonalAccessTokenController::class, 'index']);
-            Route::post('/', [PersonalAccessTokenController::class, 'create']);
+    Route::middleware(["auth:sanctum"])->group(function () {
+        Route::prefix("tokens")->group(function () {
+            Route::get("/", [PersonalAccessTokenController::class, "index"]);
+            Route::post("/", [PersonalAccessTokenController::class, "create"]);
         });
-        
-        Route::prefix('documents')->group(function () {
-            Route::get('/', [MessageEncryptorController::class, 'index']);
-            Route::get('/{uuid}', [MessageEncryptorController::class, 'show']);
-            Route::post('/', [MessageEncryptorController::class, 'store']);
-            Route::put('/{uuid}', [MessageEncryptorController::class, 'update']);
-            Route::delete('/{uuid}', [MessageEncryptorController::class, 'destroy']);
-            Route::prefix('decrypt')->group( function () {
-                Route::post('/{uuid}', [MessageDecryptorController::class, 'decryptWithUuid']);
-                Route::post('/', [MessageDecryptorController::class, 'decryptMessage']);
+
+        Route::prefix("documents")->group(function () {
+            Route::get("/", [MessageEncryptorController::class, "index"]);
+            Route::get("/{uuid}", [MessageEncryptorController::class, "show"]);
+            Route::post("/", [MessageEncryptorController::class, "store"]);
+            Route::put("/{uuid}", [
+                MessageEncryptorController::class,
+                "update",
+            ]);
+            Route::delete("/{uuid}", [
+                MessageEncryptorController::class,
+                "destroy",
+            ]);
+            Route::prefix("decrypt")->group(function () {
+                Route::post("/{uuid}", [
+                    MessageDecryptorController::class,
+                    "decryptWithUuid",
+                ]);
+                Route::post("/", [
+                    MessageDecryptorController::class,
+                    "decryptMessage",
+                ]);
             });
         });
 
-        Route::prefix('chats')->group(function () {
-            Route::get('/', [ChatController::class, 'index']);
-            Route::get('/show/{uuid}', [ChatController::class, 'show']);
-            Route::put('/secret/{uuid}', [ChatController::class, 'setChatSecret']);
-            Route::prefix('requests')->group(function () {
-                Route::get('/', [ChatRequestController::class, 'index']);
-                Route::post('/', [ChatRequestController::class, 'create']);
-                Route::post('/accept/{uuid}', [ChatRequestController::class, 'acceptRequest']);
-                Route::post('/reject/{uuid}', [ChatRequestController::class, 'rejectRequest']);
-                Route::post('/block/{uuid}', [ChatRequestController::class, 'blockUserRequest']);
-                Route::delete('/{uuid}', [ChatRequestController::class, 'delete']);
+        Route::prefix("chats")->group(function () {
+            Route::get("/", [ChatController::class, "index"]);
+            Route::get("/show/{uuid}", [ChatController::class, "show"]);
+            Route::put("/secret/{uuid}", [
+                ChatController::class,
+                "setChatSecret",
+            ]);
+            Route::prefix("requests")->group(function () {
+                Route::get("/", [ChatRequestController::class, "index"]);
+                Route::post("/", [ChatRequestController::class, "create"]);
+                Route::post("/accept/{uuid}", [
+                    ChatRequestController::class,
+                    "acceptRequest",
+                ]);
+                Route::post("/reject/{uuid}", [
+                    ChatRequestController::class,
+                    "rejectRequest",
+                ]);
+                Route::post("/block/{uuid}", [
+                    ChatRequestController::class,
+                    "blockUserRequest",
+                ]);
+                Route::delete("/{uuid}", [
+                    ChatRequestController::class,
+                    "delete",
+                ]);
             });
-            Route::prefix('/messages')->group(function () {
-                Route::get('/{uuid}', [ChatMessageController::class, 'index']);
-                Route::post('/{uuid}', [ChatMessageController::class, 'create']);
+            Route::prefix("/messages")->group(function () {
+                Route::get("/{uuid}", [ChatMessageController::class, "index"]);
+                Route::post("/{uuid}", [
+                    ChatMessageController::class,
+                    "create",
+                ]);
             });
         });
     });

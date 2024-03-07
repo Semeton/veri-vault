@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace App\Http\Controllers\Api;
 
+use App\Actions\Fortify\CreateNewUser;
 use App\Enums\HTTPResponseEnum;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -9,7 +10,6 @@ use App\Http\Controllers\Controller;
 use App\Models\EmailVerificationToken;
 use App\Services\EmailService;
 use Illuminate\Support\Facades\Auth;
-use phpDocumentor\Reflection\Types\Boolean;
 
 class UserAuthController extends Controller
 {
@@ -19,17 +19,13 @@ class UserAuthController extends Controller
             "name" => "required|string|max:255",
             "email" => "required|string|email|max:255|unique:users",
             "password" => "required|string|min:8",
+            "password_confirmation" => "required|string|min:8",
+            "terms" => "required|string",
         ]);
-
-        $user = User::create(
-            array_merge($validatedData, [
-                "password" => bcrypt($request->password),
-            ])
-        );
+        $cUser = new CreateNewUser();
+        $user = $cUser->create($validatedData);
 
         $this->sendVerificationToken($user["email"]);
-
-        // $token = $user->createToken("auth_token")->plainTextToken;
 
         return response()->json(
             [
@@ -44,6 +40,25 @@ class UserAuthController extends Controller
     {
         $token = mt_rand(100000, 999999);
         $user = User::where("email", $email)->first();
+
+        if (!$user) {
+            return response()->json(
+                [
+                    "error" => "notFound",
+                    "message" => $email . " is not not a valid email",
+                ],
+                HTTPResponseEnum::NOT_FOUND
+            );
+        }
+
+        if (!is_null($user->email_verified_at)) {
+            return response()->json(
+                [
+                    "message" => "Email already verified",
+                ],
+                HTTPResponseEnum::OK
+            );
+        }
         $data = [
             "token" => $token,
         ];
@@ -63,7 +78,6 @@ class UserAuthController extends Controller
         $emailService = new EmailService();
         $emailService->sendEmailVerificationMail($mailData);
 
-        // Code to send the verification token via email or SMS can be added here
         return response()->json(
             [
                 "message" => "Verification token sent successfully",
@@ -80,19 +94,29 @@ class UserAuthController extends Controller
 
     public function verify($token)
     {
-        $user = EmailVerificationToken::where("token", $token)->first();
+        $token = EmailVerificationToken::where("token", $token)->first();
 
-        if (!$user) {
-            return response()->json(["error" => "invalidToken"], 400);
+        if (!$token) {
+            return response()->json(
+                [
+                    "error" => "invalidToken",
+                    "message" => "Token is invalid or has expired",
+                ],
+                HTTPResponseEnum::BAD_REQUEST
+            );
         }
 
+        $user = User::find($token->user_id);
         $user->email_verified_at = now();
-        $user->email_verification_token = null;
         $user->save();
 
+        $token->delete();
+
+        $authToken = $user->createToken("auth_token")->plainTextToken;
+
         return response()->json(
-            ["message" => "Email verified successfully"],
-            200
+            ["message" => "Email verified successfully", "token" => $authToken],
+            HTTPResponseEnum::OK
         );
     }
     public function login(Request $request)
