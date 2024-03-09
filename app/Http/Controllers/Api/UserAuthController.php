@@ -45,7 +45,7 @@ class UserAuthController extends Controller
             return response()->json(
                 [
                     "error" => "notFound",
-                    "message" => $email . " is not not a valid email",
+                    "message" => $email . " is not registered",
                 ],
                 HTTPResponseEnum::NOT_FOUND
             );
@@ -119,6 +119,7 @@ class UserAuthController extends Controller
             HTTPResponseEnum::OK
         );
     }
+
     public function login(Request $request)
     {
         $credentials = $request->validate([
