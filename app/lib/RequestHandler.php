@@ -8,11 +8,11 @@ use Illuminate\Http\Request;
 use App\Enums\HTTPResponseEnum;
 use Illuminate\Http\JsonResponse;
 
-class RequestHandler{
-    
+class RequestHandler
+{
     /**
      * Validates the incoming request against the provided rules.
-     * 
+     *
      * @param Request $request Incoming request to validate.
      * @param array $rules Validation rules.
      * @return array Validated data.
@@ -21,10 +21,10 @@ class RequestHandler{
     {
         return $request->validate($rules);
     }
-    
+
     /**
      * Handles exceptions for the chat request operations.
-     * 
+     *
      * @param callable $callback Function to execute that may throw an exception.
      * @return JsonResponse Either the successful response from the callback or an error message.
      */
@@ -33,10 +33,13 @@ class RequestHandler{
         try {
             return $callback();
         } catch (Exception $e) {
-            return response()->json([
-                'error' => 'Exception',
-                'message' => $e->getMessage(),
-            ], HTTPResponseEnum::BAD_REQUEST);
+            return response()->json(
+                [
+                    "error" => "Exception",
+                    "message" => $e->getMessage(),
+                ],
+                HTTPResponseEnum::BAD_REQUEST
+            );
         }
     }
 }
