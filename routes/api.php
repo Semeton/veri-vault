@@ -83,11 +83,11 @@ Route::prefix("v1")->group(function () {
             Route::prefix("requests")->group(function () {
                 Route::get("/", [ChatRequestController::class, "index"]);
                 Route::post("/", [ChatRequestController::class, "create"]);
-                Route::post("/accept/{uuid}", [
+                Route::get("/accept/{uuid}", [
                     ChatRequestController::class,
                     "acceptRequest",
                 ]);
-                Route::post("/reject/{uuid}", [
+                Route::get("/reject/{uuid}", [
                     ChatRequestController::class,
                     "rejectRequest",
                 ]);
