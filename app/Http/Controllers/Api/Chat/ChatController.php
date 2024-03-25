@@ -25,18 +25,20 @@ class ChatController extends Controller
 
     /**
      * ChatRequestController constructor.
-     * 
+     *
      * @param User $user Injected User model to interact with user data.
      * @param ChatService $chatService Injected service to handle business logic related to chat requests.
      */
-    public function __construct(public RequestHandler $requestHandler, public ChatService $chatService)
-    {
+    public function __construct(
+        public RequestHandler $requestHandler,
+        public ChatService $chatService
+    ) {
         $this->middleware(function ($request, $next) {
             $this->authenticatedUser = Auth::user();
             return $next($request);
         });
     }
-    
+
     /**
      * Retrieves a list of chats for the authenticated user.
      *
@@ -46,6 +48,15 @@ class ChatController extends Controller
     {
         return $this->requestHandler->handleException(function () {
             $chats = $this->authenticatedUser->chats()->get();
+            foreach ($chats as $c) {
+                if ($c["recipient_id"] !== $this->authenticatedUser->id) {
+                    $c["other"] = User::find($c["recipient_id"]);
+                    $c["role"] = "sender";
+                } else {
+                    $c["other"] = User::find($c["sender_id"]);
+                    $c["role"] = "recipient";
+                }
+            }
             return response()->json($chats, JsonResponse::HTTP_OK);
         });
     }
@@ -59,20 +70,36 @@ class ChatController extends Controller
     public function show(string $uuid): JsonResponse
     {
         return $this->requestHandler->handleException(function () use ($uuid) {
-            $chat = $this->chatService->validateUuid($this->authenticatedUser, $uuid);
-            $chat->role = $chat->sender_id === $this->authenticatedUser->id ? 'sender' : 'recipient';
+            $chat = $this->chatService->validateUuid(
+                $this->authenticatedUser,
+                $uuid
+            );
+            $chat->role =
+                $chat->sender_id === $this->authenticatedUser->id
+                    ? "sender"
+                    : "recipient";
             return response()->json($chat, JsonResponse::HTTP_OK);
         });
     }
 
     public function setChatSecret(string $uuid, Request $request)
     {
-        return $this->requestHandler->handleException(function () use ($uuid, $request) {
+        return $this->requestHandler->handleException(function () use (
+            $uuid,
+            $request
+        ) {
             $this->requestHandler->validateRequest($request, [
-                'chat_secret' => 'required|string|min:6',
+                "chat_secret" => "required|string|min:6",
             ]);
-            $chat = $this->chatService->validateUuid($this->authenticatedUser, $uuid);
-            $this->chatService->setUserChatSecret($this->authenticatedUser, $chat, $request->chat_secret);
+            $chat = $this->chatService->validateUuid(
+                $this->authenticatedUser,
+                $uuid
+            );
+            $this->chatService->setUserChatSecret(
+                $this->authenticatedUser,
+                $chat,
+                $request->chat_secret
+            );
             return response()->json($chat, JsonResponse::HTTP_CREATED);
         });
     }

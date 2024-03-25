@@ -11,24 +11,24 @@ class Chat extends Model
     use HasFactory;
 
     protected $fillable = [
-        'sender_id',
-        'recipient_id',
-        'uuid',
-        'chat_key',
-        'sender_secret',
-        'sender_lock_secret',
-        'recipient_secret',
-        'recipient_lock_secret',
-        'archive',
-        'status',
+        "sender_id",
+        "recipient_id",
+        "uuid",
+        "chat_key",
+        "sender_secret",
+        "sender_lock_secret",
+        "recipient_secret",
+        "recipient_lock_secret",
+        "archive",
+        "status",
     ];
 
     protected $hidden = [
-        'chat_key',
-        'sender_secret',
-        'sender_lock_secret',
-        'recipient_secret',
-        'recipient_lock_secret',
+        "chat_key",
+        // 'sender_secret',
+        "sender_lock_secret",
+        // 'recipient_secret',
+        "recipient_lock_secret",
     ];
 
     public function chatMessages(): HasMany
