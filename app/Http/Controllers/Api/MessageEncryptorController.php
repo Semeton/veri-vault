@@ -36,7 +36,13 @@ class MessageEncryptorController extends Controller
         $documents = $this->user
             ->documents()
             ->select("title", "uuid", "created_at", "updated_at")
+            ->where("title", "!=", "chat")
             ->get();
+
+        foreach ($documents as $doc) {
+            $doc->created_at_hum = $doc->created_at->diffForHumans();
+            $doc->updated_at_hum = $doc->updated_at->diffForHumans();
+        }
         return response()->json($documents);
     }
 

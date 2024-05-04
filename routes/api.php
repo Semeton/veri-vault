@@ -58,7 +58,7 @@ Route::prefix("v1")->group(function () {
                 MessageEncryptorController::class,
                 "update",
             ]);
-            Route::delete("/{uuid}", [
+            Route::get("/delete/{uuid}", [
                 MessageEncryptorController::class,
                 "destroy",
             ]);

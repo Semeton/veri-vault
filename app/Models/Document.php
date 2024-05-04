@@ -10,15 +10,10 @@ class Document extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'title',
-        'user_id',
-        'encrypted_content',
-        'uuid'
-    ];
+    protected $fillable = ["title", "user_id", "encrypted_content", "uuid"];
 
     protected $hidden = [
-        'id',
+        "id",
         // 'user_id'
     ];
 
