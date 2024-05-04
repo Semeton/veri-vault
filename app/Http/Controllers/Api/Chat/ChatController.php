@@ -74,10 +74,17 @@ class ChatController extends Controller
                 $this->authenticatedUser,
                 $uuid
             );
-            $chat->role =
-                $chat->sender_id === $this->authenticatedUser->id
-                    ? "sender"
-                    : "recipient";
+            if ($chat->recipient_id !== $this->authenticatedUser->id) {
+                $chat->other = User::find($chat->recipient_id);
+                $chat->role = "sender";
+            } else {
+                $chat->other = User::find($chat->sender_id);
+                $chat->role = "recipient";
+            }
+            // $chat->role =
+            //     $chat->sender_id === $this->authenticatedUser->id
+            //         ? "sender"
+            //         : "recipient";
             return response()->json($chat, JsonResponse::HTTP_OK);
         });
     }

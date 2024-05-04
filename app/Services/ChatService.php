@@ -7,8 +7,8 @@ use App\Models\Chat;
 use App\Models\User;
 use App\Enums\HTTPResponseEnum;
 
-class ChatService {
-
+class ChatService
+{
     /**
      * Handles exceptions thrown during chat operations.
      *
@@ -18,24 +18,27 @@ class ChatService {
      */
     public function validateUuid(User $user, string $uuid): Chat
     {
-        $chat = $user->chats()->where('uuid', $uuid)->first();
+        $chat = $user->chats()->where("uuid", $uuid)->first();
         if (!$chat) {
-            abort(HTTPResponseEnum::NOT_FOUND, 'Chat does not exist');
+            abort(HTTPResponseEnum::NOT_FOUND, "Chat does not exist");
         }
         return $chat;
     }
 
-    public function setUserChatSecret(User $user, Chat $chat, string $secret): void
-    {
+    public function setUserChatSecret(
+        User $user,
+        Chat $chat,
+        string $secret
+    ): void {
         if ($chat->sender_id === $user->id) {
             $chat->update([
-                'sender_secret' => bcrypt($secret),
-                'sender_lock_secret' => bcrypt(strrev($secret)),
+                "sender_secret" => bcrypt($secret),
+                "sender_lock_secret" => bcrypt(strrev($secret)),
             ]);
         } else {
             $chat->update([
-                'recipient_secret' => bcrypt($secret),
-                'recipient_lock_secret' => bcrypt(strrev($secret)),
+                "recipient_secret" => bcrypt($secret),
+                "recipient_lock_secret" => bcrypt(strrev($secret)),
             ]);
         }
     }

@@ -16,29 +16,46 @@ use App\Services\EncryptRequestService;
 class ChatMessageController extends Controller
 {
     private User $authenticatedUser;
-    
+
     public function __construct(
-        public RequestHandler $requestHandler, public ChatMessageService $chatMessageService,
-        public ChatService $chatService, public EncryptRequestService $encryptRequestService
-    )
-    {
+        public RequestHandler $requestHandler,
+        public ChatMessageService $chatMessageService,
+        public ChatService $chatService,
+        public EncryptRequestService $encryptRequestService
+    ) {
         $this->middleware(function ($request, $next) {
             $this->authenticatedUser = Auth::user();
             return $next($request);
         });
     }
 
-    public function index(string $uuid, Request $request)
+    public function index(string $uuid, $secret)
     {
-        return $this->requestHandler->handleException(function () use ($uuid, $request) {
-            $this->requestHandler->validateRequest($request, [
-                'secret' => 'required|string',
-            ]);
-            $chat = $this->chatService->validateUuid($this->authenticatedUser, $uuid);
-            $this->chatMessageService->validateUser($this->authenticatedUser, $chat);
-            $this->chatMessageService->validateChatSecret($this->authenticatedUser, $chat, $request->secret);
-            $chatMessages = Chat::where('uuid', $uuid)->first()->chatMessages()->with('messages')->get();
-            $messages = $this->chatMessageService->processEncryptedMessage($chatMessages);
+        return $this->requestHandler->handleException(function () use (
+            $uuid,
+            $secret
+        ) {
+            $chat = $this->chatService->validateUuid(
+                $this->authenticatedUser,
+                $uuid
+            );
+            $this->chatMessageService->validateUser(
+                $this->authenticatedUser,
+                $chat
+            );
+            $this->chatMessageService->validateChatSecret(
+                $this->authenticatedUser,
+                $chat,
+                $secret
+            );
+            $chatMessages = Chat::where("uuid", $uuid)
+                ->first()
+                ->chatMessages()
+                ->with("messages")
+                ->get();
+            $messages = $this->chatMessageService->processEncryptedMessage(
+                $chatMessages
+            );
 
             return response()->json($messages, HTTPResponseEnum::OK);
         });
@@ -46,19 +63,37 @@ class ChatMessageController extends Controller
 
     public function create(string $uuid, Request $request)
     {
-        return $this->requestHandler->handleException(function () use ($uuid, $request) {
+        return $this->requestHandler->handleException(function () use (
+            $uuid,
+            $request
+        ) {
             $data = $this->requestHandler->validateRequest($request, [
-                'body' => 'required|string',
+                "body" => "required|string",
             ]);
-            $chat = $this->chatService->validateUuid($this->authenticatedUser, $uuid);
-            $this->chatMessageService->validateUser($this->authenticatedUser, $chat);
+            $chat = $this->chatService->validateUuid(
+                $this->authenticatedUser,
+                $uuid
+            );
+            $this->chatMessageService->validateUser(
+                $this->authenticatedUser,
+                $chat
+            );
             $data = array_merge($data, [
-                'title' => 'chat',
-                'secret' => $chat->chat_key,
+                "title" => "chat",
+                "secret" => $chat->chat_key,
             ]);
-            $message = $this->encryptRequestService->encryptAndStoreDocument($this->authenticatedUser, $data);
-            $chatMessage = $this->chatMessageService->storeChatMessage($message, $chat);
-            return response()->json(['uuid' => $chatMessage->uuid], HTTPResponseEnum::OK);
+            $message = $this->encryptRequestService->encryptAndStoreDocument(
+                $this->authenticatedUser,
+                $data
+            );
+            $chatMessage = $this->chatMessageService->storeChatMessage(
+                $message,
+                $chat
+            );
+            return response()->json(
+                ["uuid" => $chatMessage->uuid],
+                HTTPResponseEnum::OK
+            );
         });
     }
 }

@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\UserAuthController;
 use App\Http\Controllers\Api\Chat\ChatController;
 use App\Http\Controllers\Api\Chat\ChatMessageController;
 use App\Http\Controllers\Api\Chat\ChatRequestController;
+use App\Http\Controllers\Api\EncryptedEmailController;
 use App\Http\Controllers\Api\MessageDecryptorController;
 use App\Http\Controllers\Api\MessageEncryptorController;
 use App\Http\Controllers\Api\PersonalAccessTokenController;
@@ -101,12 +102,19 @@ Route::prefix("v1")->group(function () {
                 ]);
             });
             Route::prefix("/messages")->group(function () {
-                Route::get("/{uuid}", [ChatMessageController::class, "index"]);
+                Route::get("/{uuid}/{secret}", [
+                    ChatMessageController::class,
+                    "index",
+                ]);
                 Route::post("/{uuid}", [
                     ChatMessageController::class,
                     "create",
                 ]);
             });
         });
+    });
+    Route::prefix("emails")->group(function () {
+        Route::get("/", [EncryptedEmailController::class, "index"]);
+        Route::post("/", [EncryptedEmailController::class, "create"]);
     });
 });
