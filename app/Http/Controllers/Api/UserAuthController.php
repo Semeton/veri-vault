@@ -9,7 +9,10 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\EmailVerificationToken;
 use App\Services\EmailService;
+use Exception;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 
 class UserAuthController extends Controller
 {
@@ -118,6 +121,87 @@ class UserAuthController extends Controller
             ["message" => "Email verified successfully", "token" => $authToken],
             HTTPResponseEnum::OK
         );
+    }
+
+    public function update(Request $request)
+    {
+        try {
+            $data = $request->validate([
+                "username" => "required|string|unique:users",
+                "name" => "required|string",
+                "email" => "required|string|email",
+            ]);
+
+            $user = Auth::user();
+
+            if (!$user instanceof User) {
+                return response()->json(["error" => "UError"], 400);
+                abort(
+                    HTTPResponseEnum::UNAUTHENTICATED,
+                    HTTPResponseEnum::getUnathorizedMessage()
+                );
+            }
+
+            $user->update($data);
+
+            return response()->json(
+                ["message" => "User updated successfully"],
+                200
+            );
+        } catch (Exception $e) {
+            return response()->json(["error" => $e->getMessage()], 400);
+        }
+    }
+
+    public function updatePassword(Request $request)
+    {
+        try {
+            // Validate incoming request data
+            $data = $request->validate([
+                "old_password" => "required|string",
+                "new_password" => "required|string|min:8",
+                "new_password_confirmation" =>
+                    "required|string|same:new_password",
+            ]);
+
+            $user = Auth::user();
+
+            if (!$user instanceof User) {
+                return response()->json(
+                    ["error" => "User does not exist"],
+                    400
+                );
+            }
+
+            if (!Hash::check($data["old_password"], $user->password)) {
+                return response()->json(
+                    ["error" => "Old password entered is incorrect"],
+                    400
+                );
+            }
+
+            if (Hash::check($data["new_password"], $user->password)) {
+                return response()->json(
+                    [
+                        "error" =>
+                            "New password cannot be the same as the old password",
+                    ],
+                    400
+                );
+            }
+
+            $user->password = Hash::make($data["new_password"]);
+            $user->save();
+
+            return response()->json(
+                ["message" => "Password updated successfully"],
+                200
+            );
+        } catch (ValidationException $e) {
+            return response()->json(["error" => $e->errors()], 400);
+        } catch (Exception $e) {
+            return response()->json(["error" => $e->getMessage()], 400);
+        }
     }
 
     public function login(Request $request)

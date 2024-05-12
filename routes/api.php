@@ -39,10 +39,14 @@ Route::prefix("v1")->group(function () {
         ]);
         Route::get("/verify/{token}", [UserAuthController::class, "verify"]);
         Route::post("/login", [UserAuthController::class, "login"]);
-        Route::middleware("auth:sanctum")->get("/me", [
-            UserAuthController::class,
-            "me",
-        ]);
+        Route::middleware("auth:sanctum")->group(function () {
+            Route::get("/me", [UserAuthController::class, "me"]);
+            Route::post("/update", [UserAuthController::class, "update"]);
+            Route::post("/update/password", [
+                UserAuthController::class,
+                "updatePassword",
+            ]);
+        });
     });
     Route::middleware(["auth:sanctum"])->group(function () {
         Route::prefix("tokens")->group(function () {

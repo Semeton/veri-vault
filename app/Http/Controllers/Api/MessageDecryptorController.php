@@ -101,10 +101,7 @@ class MessageDecryptorController extends Controller
                 // );
             }
         } catch (Exception $e) {
-            abort(
-                HTTPResponseEnum::BAD_REQUEST,
-                "Decryption failed: invalid secret code"
-            );
+            abort($e->getCode(), $e->getMessage());
         }
     }
 }
