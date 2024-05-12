@@ -54,7 +54,7 @@ Route::prefix("v1")->group(function () {
             Route::get("/", [MessageEncryptorController::class, "index"]);
             Route::get("/{uuid}", [MessageEncryptorController::class, "show"]);
             Route::post("/", [MessageEncryptorController::class, "store"]);
-            Route::put("/{uuid}", [
+            Route::post("/{uuid}", [
                 MessageEncryptorController::class,
                 "update",
             ]);
@@ -63,7 +63,7 @@ Route::prefix("v1")->group(function () {
                 "destroy",
             ]);
             Route::prefix("decrypt")->group(function () {
-                Route::post("/{uuid}", [
+                Route::get("/{uuid}/{secret}", [
                     MessageDecryptorController::class,
                     "decryptWithUuid",
                 ]);
@@ -116,6 +116,7 @@ Route::prefix("v1")->group(function () {
         Route::prefix("emails")->group(function () {
             Route::get("/", [EncryptedEmailController::class, "index"]);
             Route::post("/", [EncryptedEmailController::class, "create"]);
+            Route::get("/delete", [EncryptedEmailController::class, "delete"]);
         });
     });
 });

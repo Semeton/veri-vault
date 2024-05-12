@@ -40,8 +40,8 @@ class MessageEncryptorController extends Controller
             ->get();
 
         foreach ($documents as $doc) {
-            $doc->created_at_hum = $doc->created_at->diffForHumans();
-            $doc->updated_at_hum = $doc->updated_at->diffForHumans();
+            $doc->created_at_hum = $doc->created_at->format("Y-m-d H:i A");
+            $doc->updated_at_hum = $doc->updated_at->format("Y-m-d H:i A");
         }
         return response()->json($documents);
     }

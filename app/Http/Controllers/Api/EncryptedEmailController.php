@@ -28,6 +28,10 @@ class EncryptedEmailController extends Controller
     public function index()
     {
         $encryptedEmails = $this->user->encryptedEmails()->get();
+        foreach ($encryptedEmails as $item) {
+            $item->created_at_hum = $item->created_at->format("Y-m-d H:i A");
+            $item->updated_at_hum = $item->updated_at->format("Y-m-d H:i A");
+        }
         return response()->json($encryptedEmails, HTTPResponseEnum::OK);
     }
 

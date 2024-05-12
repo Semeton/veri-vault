@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Enums\HTTPResponseEnum;
+
 class CryptoService
 {
     private string $key;
 
     public function __construct()
     {
-        $this->key = env('ENCRYPTION_KEY');
+        $this->key = env("ENCRYPTION_KEY");
     }
 
     /**
@@ -25,12 +27,12 @@ class CryptoService
         $nonce = random_bytes(SODIUM_CRYPTO_SECRETBOX_NONCEBYTES);
 
         $cipher = base64_encode(
-            $nonce.
-            sodium_crypto_secretbox(
-                $message,
-                $nonce,
-                hash('sha256', $this->key . $secretCode, true)
-            )
+            $nonce .
+                sodium_crypto_secretbox(
+                    $message,
+                    $nonce,
+                    hash("sha256", $this->key . $secretCode, true)
+                )
         );
 
         sodium_memzero($message);
@@ -50,21 +52,39 @@ class CryptoService
     {
         try {
             $decoded = base64_decode($encrypted);
-            $nonce = mb_substr($decoded, 0, SODIUM_CRYPTO_SECRETBOX_NONCEBYTES, '8bit');
-            $ciphertext = mb_substr($decoded, SODIUM_CRYPTO_SECRETBOX_NONCEBYTES, null, '8bit');
+            $nonce = mb_substr(
+                $decoded,
+                0,
+                SODIUM_CRYPTO_SECRETBOX_NONCEBYTES,
+                "8bit"
+            );
+            $ciphertext = mb_substr(
+                $decoded,
+                SODIUM_CRYPTO_SECRETBOX_NONCEBYTES,
+                null,
+                "8bit"
+            );
 
             try {
                 $plain = sodium_crypto_secretbox_open(
                     $ciphertext,
                     $nonce,
-                    hash('sha256', $this->key . $secretCode, true)
+                    hash("sha256", $this->key . $secretCode, true)
                 );
             } catch (\Exception $e) {
-                return "Error: Decryption failed: " . $e->getMessage();
+                abort(
+                    HTTPResponseEnum::BAD_REQUEST,
+                    "Error: Decryption failed: " . $e->getMessage()
+                );
+                // return "Error: Decryption failed: " . $e->getMessage();
             }
 
             if (!is_string($plain)) {
-                return "Error: Invalid data or secret code";
+                abort(
+                    HTTPResponseEnum::BAD_REQUEST,
+                    "Decryption failed: invalid secret code"
+                );
+                // return "Error: Invalid data or secret code";
             }
 
             sodium_memzero($ciphertext);
@@ -72,7 +92,11 @@ class CryptoService
 
             return $plain;
         } catch (\Exception $e) {
-            return "Error: Invalid cipher text: " . $e->getMessage();
+            abort(
+                HTTPResponseEnum::BAD_REQUEST,
+                "Decryption failed: secret code"
+            );
+            // return "Error: Invalid cipher text: " . $e->getMessage();
         }
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Enums\HTTPResponseEnum;
 use Exception;
 use App\Services\CryptoService;
 use App\Models\Document;
@@ -22,65 +23,88 @@ class MessageDecryptorController extends Controller
     public function decryptMessage(Request $request)
     {
         $validatedData = $request->validate([
-            'encrypted_content' => 'required',
-            'secret' => 'required',
+            "encrypted_content" => "required",
+            "secret" => "required",
         ]);
 
         $bearerToken = $request->bearerToken();
-        if ($bearerToken && $request->user()->tokenCan('read')) {
-            $decryptedContent = $this->cryptoService->decrypt($validatedData['encrypted_content'], $validatedData['secret']);
+        if ($bearerToken && $request->user()->tokenCan("read")) {
+            $decryptedContent = $this->cryptoService->decrypt(
+                $validatedData["encrypted_content"],
+                $validatedData["secret"]
+            );
             return response()->json([
-                'document' => $decryptedContent,
+                "document" => $decryptedContent,
             ]);
         } else {
-            return response()->json([
-                'message' => 'You are not allowed to perform this operation'
-            ], 401);
+            return response()->json(
+                [
+                    "message" =>
+                        "You are not allowed to perform this operation",
+                ],
+                401
+            );
         }
     }
 
-    public function decryptWithUuid(string $uuid, Request $request)
-    {
-        try{
-            $validator = validator($request->all(), [
-                'secret' => 'required|string'
-            ]);
+    public function decryptWithUuid(
+        string $uuid,
+        string $secret,
+        Request $request
+    ) {
+        try {
+            $encryptedDocument = Document::where("uuid", $uuid)
+                ->where("user_id", Auth::id())
+                ->value("encrypted_content");
 
-            if ($validator->fails()) {
-                return response()->json([
-                    'error' => 'validationError',
-                    'message' => $validator->errors()
-                ], 400);
-            }
-            $encryptedDocument = Document::where('uuid', $uuid)
-                                ->where('user_id', Auth::id())
-                                ->value('encrypted_content');
-
-            if(!$encryptedDocument){
-                return response()->json([
-                    'error' => 'notFound',
-                    'message' => "No document found with the provided UUID for this user"
-                ], 404);
+            if (!$encryptedDocument) {
+                abort(
+                    HTTPResponseEnum::NOT_FOUND,
+                    HTTPResponseEnum::getNotFoundMessage(
+                        "Decrypt document",
+                        $uuid
+                    )
+                );
+                // return response()->json(
+                //     [
+                //         "error" => "notFound",
+                //         "message" =>
+                //             "No document found with the provided UUID for this user",
+                //     ],
+                //     404
+                // );
             }
             $bearerToken = $request->bearerToken();
-            if ($bearerToken && $request->user()->tokenCan('read')) {
-                $decryptedContent = $this->cryptoService->decrypt($encryptedDocument, $request['secret']);
-                
+            if ($bearerToken && $request->user()->tokenCan("read")) {
+                $decryptedContent = $this->cryptoService->decrypt(
+                    $encryptedDocument,
+                    $secret
+                );
+
                 return response()->json([
-                    'document' => $decryptedContent,
+                    "title" => Document::where("uuid", $uuid)
+                        ->where("user_id", Auth::id())
+                        ->value("title"),
+                    "document" => $decryptedContent,
                 ]);
             } else {
-                return response()->json([
-                    'message' => 'You are not allowed to perform this operation'
-                ], 403);
+                abort(
+                    HTTPResponseEnum::FORBIDDEN,
+                    "You are not allowed to perform this operation"
+                );
+                // return response()->json(
+                //     [
+                //         "message" =>
+                //             "You are not allowed to perform this operation",
+                //     ],
+                //     403
+                // );
             }
-            
-            
-        } catch (Exception $e){
-            return response()->json([
-                'error' => 'Exception',
-                'message' => $e->getMessage()
-            ]);
+        } catch (Exception $e) {
+            abort(
+                HTTPResponseEnum::BAD_REQUEST,
+                "Decryption failed: invalid secret code"
+            );
         }
     }
 }
