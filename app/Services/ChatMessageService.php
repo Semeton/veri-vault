@@ -83,7 +83,6 @@ class ChatMessageService
             "message_uuid" => $message->uuid,
             "status" => 1,
         ];
-
         return $chat->chatMessages()->create($data);
     }
 }
