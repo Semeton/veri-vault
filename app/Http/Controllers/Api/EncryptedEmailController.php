@@ -47,24 +47,18 @@ class EncryptedEmailController extends Controller
                 $data["secret"]
             );
             $data["encrypted_body"] = $encryptedBody;
-            $savedData = $this->user->encryptedEmails()->create($data);
-            $mailData = $savedData->toArray();
 
-            if (
+            if ($savedData = $this->user->encryptedEmails()->create($data)) {
+                $mailData = $savedData->toArray();
                 $this->emailService->sendEncryptedMail(
                     $data["recipient"],
                     $this->user,
                     $mailData
-                )
-            ) {
+                );
+
                 return response()->json(
                     ["message" => "success"],
                     HTTPResponseEnum::OK
-                );
-            } else {
-                return response()->json(
-                    HTTPResponseEnum::getBadRequestMessage(),
-                    HTTPResponseEnum::BAD_REQUEST
                 );
             }
         });

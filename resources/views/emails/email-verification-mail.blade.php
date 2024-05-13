@@ -3,7 +3,7 @@
 
 Hello {{ $data['name'] }}
 
-The body of your message.
+Thank you for registering VeriChat. Here is your verification code:
 
 # {{ $data['token'] }}
 
