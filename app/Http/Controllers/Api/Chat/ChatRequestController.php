@@ -42,11 +42,11 @@ class ChatRequestController extends Controller
     {
         return $this->requestHandler->handleException(function () {
             $this->user = Auth::user();
-            $sentChatRequests = $this->user->sentChatRequests->each(function (
-                $item
-            ) {
-                $item->recipient_email = $item->recipient()->get();
-            });
+            $sentChatRequests = $this->user->sentChatRequests
+                ->where("status", 0)
+                ->each(function ($item) {
+                    $item->recipient_email = $item->recipient()->get();
+                });
             $receivedChatRequests = $this->user->receivedChatRequests
                 ->where("status", 0)
                 ->each(function ($item) {
