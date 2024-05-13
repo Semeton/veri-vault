@@ -46,17 +46,19 @@ class ChatRequestController extends Controller
                 ->where("status", 0)
                 ->each(function ($item) {
                     $item->recipient_email = $item->recipient()->get();
-                });
+                })
+                ->get();
             $receivedChatRequests = $this->user->receivedChatRequests
                 ->where("status", 0)
                 ->each(function ($item) {
                     $item->sender_email = $item->sender()->get();
-                });
+                })
+                ->get();
 
             return response()->json(
                 [
-                    "sent" => $sentChatRequests->toArray(),
-                    "received" => $receivedChatRequests->toArray(),
+                    "sent" => $sentChatRequests,
+                    "received" => $receivedChatRequests,
                 ],
                 HTTPResponseEnum::OK
             );
