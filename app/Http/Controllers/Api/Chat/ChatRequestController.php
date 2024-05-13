@@ -42,26 +42,31 @@ class ChatRequestController extends Controller
     {
         return $this->requestHandler->handleException(function () {
             $this->user = Auth::user();
-            $sent = [];
-            $received = [];
-            $sentChatRequests = $this->user->sentChatRequests
+            $sentChatRequests = $this->user
+                ->sentChatRequests()
                 ->where("status", 0)
-                ->each(function ($item) use ($sent) {
+                ->get()
+                ->map(function ($item) {
                     $item->recipient_email = $item->recipient()->get();
-                    $sent[] = $item;
-                });
+                    return $item->toArray();
+                })
+                ->toArray();
 
-            $receivedChatRequests = $this->user->receivedChatRequests
+            // Get received chat requests as array
+            $receivedChatRequests = $this->user
+                ->receivedChatRequests()
                 ->where("status", 0)
-                ->each(function ($item) use ($received) {
+                ->get()
+                ->map(function ($item) {
                     $item->sender_email = $item->sender()->get();
-                    $received[] = $item;
-                });
+                    return $item->toArray();
+                })
+                ->toArray();
 
             return response()->json(
                 [
-                    "sent" => $sent,
-                    "received" => $received,
+                    "sent" => $sentChatRequests,
+                    "received" => $receivedChatRequests,
                 ],
                 HTTPResponseEnum::OK
             );
