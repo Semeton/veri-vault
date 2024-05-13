@@ -46,14 +46,14 @@ class ChatRequestController extends Controller
             $received = [];
             $sentChatRequests = $this->user->sentChatRequests
                 ->where("status", 0)
-                ->each(function ($item) {
+                ->each(function ($item) use ($sent) {
                     $item->recipient_email = $item->recipient()->get();
                     $sent[] = $item;
                 });
 
             $receivedChatRequests = $this->user->receivedChatRequests
                 ->where("status", 0)
-                ->each(function ($item) {
+                ->each(function ($item) use ($received) {
                     $item->sender_email = $item->sender()->get();
                     $received[] = $item;
                 });
