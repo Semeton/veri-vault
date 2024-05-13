@@ -55,8 +55,8 @@ class ChatRequestController extends Controller
 
             return response()->json(
                 [
-                    "sent" => $sentChatRequests,
-                    "received" => $receivedChatRequests,
+                    "sent" => $sentChatRequests->toArray(),
+                    "received" => $receivedChatRequests->toArray(),
                 ],
                 HTTPResponseEnum::OK
             );
