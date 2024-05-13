@@ -41,22 +41,17 @@ class ChatRequestController extends Controller
     public function index(): JsonResponse
     {
         return $this->requestHandler->handleException(function () {
-            $sentChatRequests = $this->user
-                ->sentChatRequests()
-                // ->where("status", 0)
-                ->get()
-                ->map(function ($item) {
+            $this->user = Auth::user();
+            $sentChatRequests = $this->user->sentChatRequests
+                ->where("status", 0)
+                ->each(function ($item) {
                     $item->recipient_email = $item->recipient()->get();
-                    return $item->toArray();
                 })
                 ->toArray();
-            $receivedChatRequests = $this->user
-                ->receivedChatRequests()
+            $receivedChatRequests = $this->user->receivedChatRequests
                 ->where("status", 0)
-                ->get()
-                ->map(function ($item) {
+                ->each(function ($item) {
                     $item->sender_email = $item->sender()->get();
-                    return $item->toArray();
                 })
                 ->toArray();
 
