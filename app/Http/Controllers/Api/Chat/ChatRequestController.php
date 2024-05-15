@@ -10,6 +10,7 @@ use App\Models\ChatRequest;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Enums\HTTPResponseEnum;
+use App\Events\ChatRequest as EventsChatRequest;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Services\ChatRequestService;
@@ -95,6 +96,8 @@ class ChatRequestController extends Controller
 
             $createRequest = $this->user->sentChatRequests()->create($data);
 
+            $user = User::where("email", $data["recipient_email"])->first();
+            event(new EventsChatRequest($user, $this->user->email));
             return response()->json($createRequest, HTTPResponseEnum::CREATED);
         });
     }

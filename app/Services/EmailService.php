@@ -1,9 +1,11 @@
 <?php
 namespace App\Services;
 
+use App\Mail\ChatRequestMail;
 use App\Mail\EmailVerification;
 use App\Models\User;
 use App\Mail\SendEncryptedMail;
+use App\Mail\WelcomeMail;
 use Illuminate\Support\Facades\Mail;
 
 class EmailService
@@ -25,5 +27,15 @@ class EmailService
     public function sendEmailVerificationMail(array $mailData)
     {
         Mail::to($mailData["email"])->send(new EmailVerification($mailData));
+    }
+
+    public function sendWelcomeEmail(array $mailData)
+    {
+        Mail::to($mailData["email"])->send(new WelcomeMail($mailData));
+    }
+
+    public function sendChatRequestEmail(array $mailData)
+    {
+        Mail::to($mailData["email"])->send(new ChatRequestMail($mailData));
     }
 }

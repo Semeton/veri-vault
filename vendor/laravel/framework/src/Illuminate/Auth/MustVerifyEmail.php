@@ -2,6 +2,8 @@
 
 namespace Illuminate\Auth;
 
+use App\Events\NewUserRegistration;
+use App\Models\User;
 use Illuminate\Auth\Notifications\VerifyEmail;
 
 trait MustVerifyEmail
@@ -13,7 +15,7 @@ trait MustVerifyEmail
      */
     public function hasVerifiedEmail()
     {
-        return ! is_null($this->email_verified_at);
+        return !is_null($this->email_verified_at);
     }
 
     /**
@@ -23,8 +25,9 @@ trait MustVerifyEmail
      */
     public function markEmailAsVerified()
     {
+        event(new NewUserRegistration($this));
         return $this->forceFill([
-            'email_verified_at' => $this->freshTimestamp(),
+            "email_verified_at" => $this->freshTimestamp(),
         ])->save();
     }
 
@@ -35,7 +38,7 @@ trait MustVerifyEmail
      */
     public function sendEmailVerificationNotification()
     {
-        $this->notify(new VerifyEmail);
+        $this->notify(new VerifyEmail());
     }
 
     /**

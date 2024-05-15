@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Actions\Fortify\CreateNewUser;
 use App\Enums\HTTPResponseEnum;
+use App\Events\NewUserRegistration;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -116,6 +117,8 @@ class UserAuthController extends Controller
         $token->delete();
 
         $authToken = $user->createToken("auth_token")->plainTextToken;
+
+        event(new NewUserRegistration($user));
 
         return response()->json(
             ["message" => "Email verified successfully", "token" => $authToken],
