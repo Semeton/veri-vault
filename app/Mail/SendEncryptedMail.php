@@ -28,7 +28,8 @@ class SendEncryptedMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            from: new Address($this->user->email, $this->user->name),
+            // from: new Address($this->user->email, $this->user->name),
+            from: new Address(env("MAIL_FROM_ADDRESS"), $this->user->name),
             subject: $this->mailData["subject"]
         );
     }
