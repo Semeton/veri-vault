@@ -16,9 +16,10 @@ class ChatService
      * @param string|null $uuid Optional UUID of the chat for not found exceptions.
      * @return Chat $chat with the requested uuid
      */
-    public function validateUuid(User $user, string $uuid): Chat
+    public function validateUuid(User $user, string $uuid)
     {
-        $chat = $user->chats()->where("uuid", $uuid)->first();
+        // $chat = $user->chats()->where("uuid", $uuid)->get();
+        $chat = Chat::where("uuid", $uuid)->first();
         if (!$chat) {
             abort(HTTPResponseEnum::NOT_FOUND, "Chat does not exist");
         }
