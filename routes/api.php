@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\Chat\ChatController;
 use App\Http\Controllers\Api\Chat\ChatMessageController;
 use App\Http\Controllers\Api\Chat\ChatRequestController;
 use App\Http\Controllers\Api\EncryptedEmailController;
+use App\Http\Controllers\Api\FeedBackController;
 use App\Http\Controllers\Api\MessageDecryptorController;
 use App\Http\Controllers\Api\MessageEncryptorController;
 use App\Http\Controllers\Api\PersonalAccessTokenController;
@@ -31,6 +32,7 @@ Route::prefix("v1")->group(function () {
             "message" => "Api server running",
         ]);
     });
+    Route::post("/feedback", [FeedBackController::class, "create"]);
     Route::prefix("users")->group(function () {
         Route::post("/register", [UserAuthController::class, "register"]);
         Route::get("/verify/token/{email}", [
