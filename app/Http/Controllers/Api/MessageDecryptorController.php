@@ -81,6 +81,14 @@ class MessageDecryptorController extends Controller
                     $secret
                 );
 
+                $error = explode(':', $decryptedContent)[0];
+                    if ($error === 'Error') {
+                        abort(
+                        HTTPResponseEnum::BAD_REQUEST,
+                        "Invalid secret entered"
+                    );
+                }
+
                 return response()->json([
                     "title" => Document::where("uuid", $uuid)
                         ->where("user_id", Auth::id())
@@ -101,7 +109,7 @@ class MessageDecryptorController extends Controller
                 // );
             }
         } catch (Exception $e) {
-            abort($e->getCode(), $e->getMessage());
+            abort(HTTPResponseEnum::BAD_REQUEST, $e->getMessage());
         }
     }
 }
