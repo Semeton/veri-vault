@@ -125,7 +125,10 @@ Route::prefix("v1")->group(function () {
         Route::prefix("emails")->group(function () {
             Route::get("/", [EncryptedEmailController::class, "index"]);
             Route::post("/", [EncryptedEmailController::class, "create"]);
-            Route::get("/delete", [EncryptedEmailController::class, "delete"]);
+            Route::get("/delete/{uuid}", [
+                EncryptedEmailController::class,
+                "delete",
+            ]);
         });
     });
 });

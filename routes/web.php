@@ -20,6 +20,15 @@ use App\Http\Controllers\EncryptedMessagesController;
 */
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/privacy-policy', function () {
+    $policy = file_get_contents(resource_path('markdown/policy.md'));
+    return view('policy', ['policy' => $policy]);
+})->name('privacyPolicy');
+
+Route::get('/terms-of-service', function () {
+    $terms = file_get_contents(resource_path('markdown/terms.md'));
+    return view('terms', ['terms' => $terms]);
+})->name('termsOfService');
 
 Route::get('/developer/docs', function () {
     return view('docs.index');

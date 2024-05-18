@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Enums\HTTPResponseEnum;
 use App\Http\Controllers\Controller;
 use App\Lib\RequestHandler;
+use App\Models\EncryptedEmail;
 use App\Models\User;
 use App\Services\CryptoService;
 use App\Services\EmailService;
@@ -57,9 +58,66 @@ class EncryptedEmailController extends Controller
                 );
 
                 return response()->json(
-                    ["message" => "success"],
+                    ["message" => "Encrypted email sent successfully"],
                     HTTPResponseEnum::OK
                 );
+            }
+        });
+    }
+
+    public function delete(Request $request, $uuid)
+    {
+        return $this->requestHandler->handleException(function () use (
+            $request,
+            $uuid
+        ) {
+            $exist = EncryptedEmail::where("uuid", $uuid)->get();
+
+            if (count($exist) == 0) {
+                return response()->json(
+                    [
+                        "error" => "NotFound",
+                        "message" => "EncryptedEmail does not exist",
+                        "details" => [
+                            "request" => "Delete encrypted email",
+                            "uuid" => $uuid,
+                        ],
+                    ],
+                    404
+                );
+            } else {
+                $encryptedEmail = EncryptedEmail::where("uuid", $uuid)
+                    ->where("user_id", Auth::id())
+                    ->first();
+
+                if ($encryptedEmail) {
+                    $bearerToken = $request->bearerToken();
+                    if ($bearerToken && $request->user()->tokenCan("delete")) {
+                        $encryptedEmail->delete();
+                        return response()->json([
+                            "message" =>
+                                "Encrypted email deleted successfully",
+                        ]);
+                    } else {
+                        return response()->json(
+                            [
+                                "error" => "Unauthorized",
+                                "message" =>
+                                    "You are not allowed to perform this operation",
+                            ],
+                            403
+                        );
+                    }
+                } else {
+                    return response()->json(
+                        [
+                            "error" => "Unauthorized",
+                            "message" =>
+                                "You are not allowed to perform this operation",
+                        ],
+                        403
+                    );
+                }
             }
         });
     }
