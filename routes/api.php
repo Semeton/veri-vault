@@ -45,6 +45,7 @@ Route::prefix("v1")->group(function () {
                 UserAuthController::class,
                 "accountInfo",
             ]);
+            Route::get("/purge-data", [UserAuthController::class, "purgeData"]);
             Route::post("/update", [UserAuthController::class, "update"]);
             Route::post("/update/password", [
                 UserAuthController::class,

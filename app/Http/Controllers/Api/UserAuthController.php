@@ -17,6 +17,7 @@ use Illuminate\Validation\ValidationException;
 
 class UserAuthController extends Controller
 {
+    public User $user;
     public function register(Request $request)
     {
         $validatedData = $request->validate([
@@ -238,5 +239,32 @@ class UserAuthController extends Controller
     public function accountInfo()
     {
         $user = Auth::user();
+    }
+
+    public function purgeData()
+    {
+        try {
+            $this->user = Auth::user();
+            $this->user->sentChatRequests()->delete();
+            $this->user->receivedChatRequests()->delete();
+            $this->user->encryptedEmails()->delete();
+            $this->user->documents()->delete();
+            $this->user->chats()->each(function ($chat) {
+                $chat->chatMessages()->delete();
+            });
+            return response()->json(
+                [
+                    "message" => "All data cleared successfully",
+                ],
+                200
+            );
+        } catch (Exception $e) {
+            return response()->json(
+                [
+                    "message" => $e->getMessage(),
+                ],
+                400
+            );
+        }
     }
 }
