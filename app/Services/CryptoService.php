@@ -72,19 +72,19 @@ class CryptoService
                     hash("sha256", $this->key . $secretCode, true)
                 );
             } catch (\Exception $e) {
-                abort(
-                    HTTPResponseEnum::BAD_REQUEST,
-                    "Error: Decryption failed: " . $e->getMessage()
-                );
-                // return "Error: Decryption failed: " . $e->getMessage();
+                // abort(
+                //     HTTPResponseEnum::BAD_REQUEST,
+                //     "Error: Decryption failed: " . $e->getMessage()
+                // );
+                return "Error: Decryption failed: " . $e->getMessage();
             }
 
             if (!is_string($plain)) {
-                abort(
-                    HTTPResponseEnum::BAD_REQUEST,
-                    "Decryption failed: invalid secret code"
-                );
-                // return "Error: Invalid data or secret code";
+                // abort(
+                //     HTTPResponseEnum::BAD_REQUEST,
+                //     "Decryption failed: invalid secret code"
+                // );
+                return "Error: Invalid data or secret code";
             }
 
             sodium_memzero($ciphertext);
@@ -92,11 +92,11 @@ class CryptoService
 
             return $plain;
         } catch (\Exception $e) {
-            abort(
-                HTTPResponseEnum::BAD_REQUEST,
-                "Decryption failed: secret code"
-            );
-            // return "Error: Invalid cipher text: " . $e->getMessage();
+            // abort(
+            //     HTTPResponseEnum::BAD_REQUEST,
+            //     "Decryption failed: secret code"
+            // );
+            return "Error: Invalid cipher text: " . $e->getMessage();
         }
     }
 }
