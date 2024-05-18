@@ -48,15 +48,13 @@ class ChatMessageController extends Controller
                 $chat,
                 $secret
             );
-            $chatMessages = Chat::where("uuid", $uuid)
-                ->first()
-                ->chatMessages()
-                ->with("messages")
-                ->get();
-            $messages = $this->chatMessageService->processEncryptedMessage(
-                $chatMessages
-            );
-
+            $chat = Chat::where("uuid", $uuid)->first();
+            if ($chat) {
+                $chatMessages = $chat->chatMessages()->with("messages")->get();
+                $messages = $this->chatMessageService->processEncryptedMessage(
+                    $chatMessages
+                );
+            }
             return response()->json($messages, HTTPResponseEnum::OK);
         });
     }

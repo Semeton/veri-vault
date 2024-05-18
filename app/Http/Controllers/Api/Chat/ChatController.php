@@ -13,6 +13,8 @@ use App\Http\Controllers\Controller;
 use App\Services\ChatService;
 use Illuminate\Support\Facades\Auth;
 
+use function Pest\Laravel\handleExceptions;
+
 /**
  * Handles chat-related operations for the API.
  */
@@ -47,7 +49,9 @@ class ChatController extends Controller
     public function index(): JsonResponse
     {
         return $this->requestHandler->handleException(function () {
-            $chats = $this->authenticatedUser->chats()->get();
+            $chats = Chat::forUser($this->authenticatedUser->id)
+                ->where("status", 1)
+                ->get();
             foreach ($chats as $c) {
                 if ($c["recipient_id"] !== $this->authenticatedUser->id) {
                     $c["other"] = User::find($c["recipient_id"]);
@@ -108,6 +112,20 @@ class ChatController extends Controller
                 $request->chat_secret
             );
             return response()->json($chat, JsonResponse::HTTP_CREATED);
+        });
+    }
+
+    public function unlock(string $uuid)
+    {
+        return $this->requestHandler->handleException(function () use ($uuid) {
+            $chat = Chat::where("uuid", $uuid)->firstOrFail();
+            $chat->sender_lock = 0;
+            $chat->recipient_lock = 0;
+            $chat->save();
+            return response()->json(
+                ["message" => "Chat unlocked successfully"],
+                HTTPResponseEnum::OK
+            );
         });
     }
 }

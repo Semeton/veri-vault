@@ -234,4 +234,9 @@ class UserAuthController extends Controller
     {
         return response()->json(Auth::user(), HTTPResponseEnum::OK);
     }
+
+    public function accountInfo()
+    {
+        $user = Auth::user();
+    }
 }

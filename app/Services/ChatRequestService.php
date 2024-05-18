@@ -26,6 +26,7 @@ class ChatRequestService
             "recipient_id" => $recipientId,
             "uuid" => Str::uuid(),
             "chat_key" => $chatKey,
+            "status" => 1,
         ]);
     }
 

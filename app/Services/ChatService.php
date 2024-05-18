@@ -21,7 +21,24 @@ class ChatService
         // $chat = $user->chats()->where("uuid", $uuid)->get();
         $chat = Chat::where("uuid", $uuid)->first();
         if (!$chat) {
-            abort(HTTPResponseEnum::NOT_FOUND, "Chat does not exist");
+            abort(
+                HTTPResponseEnum::BAD_REQUEST,
+                "Chat has gone through the selfdetruct mechanism"
+            );
+        }
+
+        $role = $chat->sender_id === $user->id ? "sender" : "recipient";
+        $lock = "{$role}_lock";
+
+        if ($chat->$lock === 1) {
+            abort(HTTPResponseEnum::BAD_REQUEST, "Access denied. Chat locked");
+        }
+
+        if ($chat->status === 2) {
+            abort(
+                HTTPResponseEnum::BAD_REQUEST,
+                "Access denied. Chat destroyed"
+            );
         }
         return $chat;
     }

@@ -35,4 +35,11 @@ class Chat extends Model
     {
         return $this->hasMany(ChatMessage::class);
     }
+
+    public function scopeForUser($query, $userId)
+    {
+        return $query
+            ->where("sender_id", $userId)
+            ->orWhere("recipient_id", $userId);
+    }
 }

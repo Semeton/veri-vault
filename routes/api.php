@@ -41,6 +41,10 @@ Route::prefix("v1")->group(function () {
         Route::post("/login", [UserAuthController::class, "login"]);
         Route::middleware("auth:sanctum")->group(function () {
             Route::get("/me", [UserAuthController::class, "me"]);
+            Route::get("/account-info", [
+                UserAuthController::class,
+                "accountInfo",
+            ]);
             Route::post("/update", [UserAuthController::class, "update"]);
             Route::post("/update/password", [
                 UserAuthController::class,
@@ -81,6 +85,7 @@ Route::prefix("v1")->group(function () {
         Route::prefix("chats")->group(function () {
             Route::get("/", [ChatController::class, "index"]);
             Route::get("/show/{uuid}", [ChatController::class, "show"]);
+            Route::get("/unlock/{uuid}", [ChatController::class, "unlock"]);
             Route::post("/secret/{uuid}", [
                 ChatController::class,
                 "setChatSecret",
