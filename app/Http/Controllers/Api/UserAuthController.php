@@ -8,6 +8,7 @@ use App\Events\NewUserRegistration;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\ChatMessage;
 use App\Models\EmailVerificationToken;
 use App\Services\EmailService;
 use Exception;
@@ -248,10 +249,9 @@ class UserAuthController extends Controller
             $this->user->sentChatRequests()->delete();
             $this->user->receivedChatRequests()->delete();
             $this->user->encryptedEmails()->delete();
-            // $this->user->documents()->delete();
-            // $this->user->chats()->each(function ($chat) {
-            //     $chat->chatMessages()->delete();
-            // });
+            $data = $this->user->documents()->pluck("uuid");
+            ChatMessage::whereIn("message_uuid", $data)->delete();
+            $this->user->documents()->delete();
             return response()->json(
                 [
                     "message" => "All data cleared successfully",
