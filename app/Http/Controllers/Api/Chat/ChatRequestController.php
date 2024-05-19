@@ -11,6 +11,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Enums\HTTPResponseEnum;
 use App\Events\ChatRequest as EventsChatRequest;
+use App\Events\NonUsersChatRequest;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Services\ChatRequestService;
@@ -92,13 +93,35 @@ class ChatRequestController extends Controller
             $this->user = Auth::user();
             $data["uuid"] = Str::uuid()->toString();
 
-            $this->chatRequestService->validateChatRequest($this->user, $data);
-
-            $createRequest = $this->user->sentChatRequests()->create($data);
-
             $user = User::where("email", $data["recipient_email"])->first();
-            event(new EventsChatRequest($user, $this->user->email));
-            return response()->json($createRequest, HTTPResponseEnum::CREATED);
+
+            if (!$user) {
+                if (
+                    $this->user->sentChatRequests
+                        ->where("recipient_email", $data["recipient_email"])
+                        ->first()
+                ) {
+                    abort(
+                        HTTPResponseEnum::BAD_REQUEST,
+                        "A request has already been already sent"
+                    );
+                }
+                $this->user->sentChatRequests()->create($data);
+                event(new NonUsersChatRequest($data["recipient_email"]));
+            } else {
+                $this->chatRequestService->validateChatRequest(
+                    $this->user,
+                    $data
+                );
+
+                $this->user->sentChatRequests()->create($data);
+
+                event(new EventsChatRequest($user, $this->user->email));
+            }
+            return response()->json(
+                ["message" => "Chat request sent successfully"],
+                HTTPResponseEnum::CREATED
+            );
         });
     }
 

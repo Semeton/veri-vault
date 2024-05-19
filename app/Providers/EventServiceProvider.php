@@ -5,9 +5,11 @@ namespace App\Providers;
 use App\Events\ChatActivity;
 use App\Events\ChatRequest;
 use App\Events\NewUserRegistration;
+use App\Events\NonUsersChatRequest;
 use App\Listeners\ChatRequestNotification;
 use App\Listeners\HandleNewUserRegistration;
 use App\Listeners\SendChatActivityNotification;
+use App\Listeners\SendNonUsersChatRequestNotification;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -25,6 +27,9 @@ class EventServiceProvider extends ServiceProvider
         NewUserRegistration::class => [HandleNewUserRegistration::class],
         ChatRequest::class => [ChatRequestNotification::class],
         ChatActivity::class => [SendChatActivityNotification::class],
+        NonUsersChatRequest::class => [
+            SendNonUsersChatRequestNotification::class,
+        ],
     ];
 
     /**

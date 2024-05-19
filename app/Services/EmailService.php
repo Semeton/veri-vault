@@ -5,6 +5,7 @@ use App\Mail\ChatActivityMail;
 use App\Mail\ChatRequestMail;
 use App\Mail\EmailVerification;
 use App\Mail\FeedBackMail;
+use App\Mail\NonUsersChatRequestMail;
 use App\Models\User;
 use App\Mail\SendEncryptedMail;
 use App\Mail\WelcomeMail;
@@ -39,6 +40,11 @@ class EmailService
     public function sendChatRequestEmail(array $mailData)
     {
         Mail::to($mailData["email"])->send(new ChatRequestMail($mailData));
+    }
+
+    public function sendNonUsersChatRequestEmail(string $email)
+    {
+        Mail::to($email)->send(new NonUsersChatRequestMail($email));
     }
 
     public static function sendChatChatActivityEmail(array $mailData)
