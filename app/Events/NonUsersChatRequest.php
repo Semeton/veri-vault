@@ -17,7 +17,7 @@ class NonUsersChatRequest
     /**
      * Create a new event instance.
      */
-    public function __construct(public string $email)
+    public function __construct(public string $email, public string $to)
     {
         //
     }

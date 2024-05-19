@@ -42,9 +42,9 @@ class EmailService
         Mail::to($mailData["email"])->send(new ChatRequestMail($mailData));
     }
 
-    public function sendNonUsersChatRequestEmail(string $email)
+    public function sendNonUsersChatRequestEmail(string $to, string $email)
     {
-        Mail::to($email)->send(new NonUsersChatRequestMail($email));
+        Mail::to($to)->send(new NonUsersChatRequestMail($email));
     }
 
     public static function sendChatChatActivityEmail(array $mailData)

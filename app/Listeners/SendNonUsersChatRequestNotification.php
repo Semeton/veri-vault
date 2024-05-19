@@ -23,6 +23,6 @@ class SendNonUsersChatRequestNotification
     public function handle(NonUsersChatRequest $event): void
     {
         $emailService = new EmailService();
-        $emailService->sendNonUsersChatRequestEmail($event->email);
+        $emailService->sendNonUsersChatRequestEmail($event->to, $event->email);
     }
 }

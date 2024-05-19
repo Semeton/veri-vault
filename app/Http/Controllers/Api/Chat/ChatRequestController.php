@@ -107,7 +107,12 @@ class ChatRequestController extends Controller
                     );
                 }
                 $this->user->sentChatRequests()->create($data);
-                event(new NonUsersChatRequest($data["recipient_email"]));
+                event(
+                    new NonUsersChatRequest(
+                        $this->user->email,
+                        $data["recipient_email"]
+                    )
+                );
             } else {
                 $this->chatRequestService->validateChatRequest(
                     $this->user,
