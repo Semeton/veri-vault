@@ -46,23 +46,23 @@ class ChatRequestController extends Controller
             $this->user = Auth::user();
             $sentChatRequests = $this->user
                 ->sentChatRequests()
-                ->where("status", 0)
+                // ->where("status", 0)
                 ->get()
-                ->map(function ($item) {
-                    $item->recipient_email = $item->recipient()->get();
-                    return $item->toArray();
-                })
+                // ->map(function ($item) {
+                //     $item->recipient_email = $item->recipient()->get();
+                //     return $item->toArray();
+                // })
                 ->toArray();
 
             // Get received chat requests as array
             $receivedChatRequests = $this->user
                 ->receivedChatRequests()
-                ->where("status", 0)
+                // ->where("status", 0)
                 ->get()
-                ->map(function ($item) {
-                    $item->sender_email = $item->sender()->get();
-                    return $item->toArray();
-                })
+                // ->map(function ($item) {
+                //     $item->sender_email = $item->sender()->get();
+                //     return $item->toArray();
+                // })
                 ->toArray();
 
             return response()->json(
