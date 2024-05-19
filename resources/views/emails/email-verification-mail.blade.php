@@ -1,7 +1,7 @@
 <x-mail::message>
 # VeriVault Verification Code
 
-Hello {{ $data['name'] }}
+Hello {{ $data['name'] }},
 
 Thank you for registering with VeriChat! We are excited to have you on board. To complete your registration, please use the verification code below:
 

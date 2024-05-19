@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Api\Chat;
 
+use App\Enums\ChatActivityEnum;
 use Throwable;
 use App\Models\Chat;
 use App\Models\User;
 use App\Lib\RequestHandler;
 use Illuminate\Http\Request;
 use App\Enums\HTTPResponseEnum;
+use App\Events\ChatActivity;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Services\ChatService;
@@ -122,6 +124,7 @@ class ChatController extends Controller
             $chat->sender_lock = 0;
             $chat->recipient_lock = 0;
             $chat->save();
+            event(new ChatActivity($chat, ChatActivityEnum::UNLOCKED));
             return response()->json(
                 ["message" => "Chat unlocked successfully"],
                 HTTPResponseEnum::OK

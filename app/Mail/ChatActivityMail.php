@@ -9,7 +9,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class EmailVerification extends Mailable
+class ChatActivityMail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -26,7 +26,7 @@ class EmailVerification extends Mailable
      */
     public function envelope(): Envelope
     {
-        return new Envelope(subject: "Verify Your Email");
+        return new Envelope(subject: "You have a new chat activity");
     }
 
     /**
@@ -35,7 +35,7 @@ class EmailVerification extends Mailable
     public function content(): Content
     {
         return new Content(
-            markdown: "emails.email-verification-mail",
+            markdown: "emails.chat-activity-mail",
             with: ["data" => $this->mailData]
         );
     }

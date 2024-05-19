@@ -3,11 +3,13 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Enums\ChatActivityEnum;
 use App\Models\Chat;
 use App\Models\User;
 use App\Models\ChatRequest;
 use Illuminate\Support\Str;
 use App\Enums\HTTPResponseEnum;
+use App\Events\ChatActivity;
 use Illuminate\Support\Facades\Auth;
 
 class ChatRequestService
@@ -21,13 +23,17 @@ class ChatRequestService
             $chatRequest->recipient_email
         );
 
-        return Chat::create([
+        $chat = Chat::create([
             "sender_id" => $senderId,
             "recipient_id" => $recipientId,
             "uuid" => Str::uuid(),
             "chat_key" => $chatKey,
             "status" => 1,
         ]);
+
+        event(new ChatActivity($chat, ChatActivityEnum::CREATED));
+
+        return $chat;
     }
 
     public function generateChatKey(

@@ -5,7 +5,7 @@ Hello <b>{{ $data['name'] }}</b>,
 
 Welcome to VeriVault!
 
-I'm Semeton, the founder and primary engineer behind this innovative platform. At VeriVault, our mission is to ensure your data security and privacy through advanced encryption techniques.
+My name Semeton Balogun, the founder and primary engineer behind this innovative platform. At VeriVault, our mission is to ensure your data security and privacy through advanced encryption techniques.
 
 <b>Key Features of VeriVault:</b>
 

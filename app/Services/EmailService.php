@@ -1,8 +1,10 @@
 <?php
 namespace App\Services;
 
+use App\Mail\ChatActivityMail;
 use App\Mail\ChatRequestMail;
 use App\Mail\EmailVerification;
+use App\Mail\FeedBackMail;
 use App\Models\User;
 use App\Mail\SendEncryptedMail;
 use App\Mail\WelcomeMail;
@@ -37,5 +39,15 @@ class EmailService
     public function sendChatRequestEmail(array $mailData)
     {
         Mail::to($mailData["email"])->send(new ChatRequestMail($mailData));
+    }
+
+    public static function sendChatChatActivityEmail(array $mailData)
+    {
+        Mail::to($mailData["to"])->send(new ChatActivityMail($mailData));
+    }
+
+    public function sendFeedBackEmail(array $mailData)
+    {
+        Mail::to("feedbacks@verivault.xyz")->send(new FeedBackMail($mailData));
     }
 }

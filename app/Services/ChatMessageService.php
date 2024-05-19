@@ -3,12 +3,14 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Enums\ChatActivityEnum;
 use App\Models\Chat;
 use App\Models\User;
 use App\Models\Document;
 use App\Models\ChatMessage;
 use Illuminate\Support\Str;
 use App\Enums\HTTPResponseEnum;
+use App\Events\ChatActivity;
 use App\Models\ChatRequest;
 use Exception;
 use Illuminate\Support\Facades\Hash;
@@ -46,12 +48,14 @@ class ChatMessageService
             } else {
                 $chat->$chatLock = 1;
                 if ($chat->save() && $chat->$otherChatLock === 1) {
+                    event(new ChatActivity($chat, ChatActivityEnum::DESTROYED));
                     $this->triggerChatSelfDestruct($chat);
                     abort(
                         HTTPResponseEnum::FORBIDDEN,
                         "Self destruct! This chat is now being destroyed and you will not have ascess to it again"
                     );
                 } else {
+                    event(new ChatActivity($chat, ChatActivityEnum::LOCKED));
                     abort(HTTPResponseEnum::FORBIDDEN, "Chat locked");
                 }
             }
@@ -75,7 +79,10 @@ class ChatMessageService
             ->where("recipient_email", $recipientEmail)
             ->first();
         // $chatRequest->status = 0;
-        $chatRequest->delete();
+        //
+        if ($chatRequest) {
+            $chatRequest->delete();
+        }
     }
 
     public function processEncryptedMessage(Collection $chatMessages): array

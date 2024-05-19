@@ -248,10 +248,10 @@ class UserAuthController extends Controller
             $this->user->sentChatRequests()->delete();
             $this->user->receivedChatRequests()->delete();
             $this->user->encryptedEmails()->delete();
-            $this->user->documents()->delete();
-            $this->user->chats()->each(function ($chat) {
-                $chat->chatMessages()->delete();
-            });
+            // $this->user->documents()->delete();
+            // $this->user->chats()->each(function ($chat) {
+            //     $chat->chatMessages()->delete();
+            // });
             return response()->json(
                 [
                     "message" => "All data cleared successfully",

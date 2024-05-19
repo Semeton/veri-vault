@@ -6,6 +6,7 @@ namespace App\Services;
 use App\Models\Chat;
 use App\Models\User;
 use App\Enums\HTTPResponseEnum;
+use Illuminate\Support\Facades\Auth;
 
 class ChatService
 {
@@ -59,5 +60,20 @@ class ChatService
                 "recipient_lock_secret" => bcrypt(strrev($secret)),
             ]);
         }
+    }
+
+    public function getParties(Chat $c)
+    {
+        $user = Auth::user();
+
+        if ($c["recipient_id"] !== $user->id) {
+            $c["other"] = User::find($c["recipient_id"]);
+            $c["role"] = "sender";
+        } else {
+            $c["other"] = User::find($c["sender_id"]);
+            $c["role"] = "recipient";
+        }
+
+        return $c;
     }
 }
