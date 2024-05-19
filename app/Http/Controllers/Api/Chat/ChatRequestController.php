@@ -86,7 +86,7 @@ class ChatRequestController extends Controller
             $request
         ) {
             $data = $this->requestHandler->validateRequest($request, [
-                "recipient_email" => "required|email|exists:users,email",
+                "recipient_email" => "required|email",
             ]);
 
             $this->user = Auth::user();
