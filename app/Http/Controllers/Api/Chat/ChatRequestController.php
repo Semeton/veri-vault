@@ -57,7 +57,7 @@ class ChatRequestController extends Controller
             // Get received chat requests as array
             $receivedChatRequests = $this->user
                 ->receivedChatRequests()
-                // ->where("status", 0)
+                ->where("status", 0)
                 ->get()
                 // ->map(function ($item) {
                 //     $item->sender_email = $item->sender()->get();
