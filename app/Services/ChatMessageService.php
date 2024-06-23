@@ -108,7 +108,7 @@ class ChatMessageService
                 return [
                     "user_id" => $item->messages[0]->user_id,
                     "uuid" => $item["uuid"],
-                    "time" => $item["created_at"]->format("h:i: A"),
+                    "time" => $item["created_at"]->format("h:i A"),
                     "message" => $plain,
                 ];
             })
